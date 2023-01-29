@@ -1,7 +1,7 @@
 # COMP-4478_Project_1
 Project 1 for COMP-4478-WA/WDE_Group_2
 
-### GROUP 2 MEMBERS ###
+GROUP 2 MEMBERS
   Abed Alhalim Ezz Aldin
   Abit Jestine
   Adam Giddens
@@ -10,4 +10,4 @@ Project 1 for COMP-4478-WA/WDE_Group_2
   Jacob Lavoie
   Justin Jacko
   Tahmidul Islam
-#######################
+
