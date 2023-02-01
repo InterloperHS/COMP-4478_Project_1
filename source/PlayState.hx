@@ -17,15 +17,25 @@ class PlayState extends FlxState
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
 	var random:FlxRandom;
+	var speed:Int;
 	override public function create()
 	{
 		super.create();
 		//Generate a new random key
 		random = new FlxRandom();
 
+		// Get player movement speed from the save file or
+		// use a default value of 5
+		if (FlxG.save.data.speed != null) {
+			speed = FlxG.save.data.speed;
+		} else {
+			speed = 5;
+		}
 		//Create the player and add them to the screen
 		player = new FlxSprite(FlxG.width/2, FlxG.height/2);
 		player.makeGraphic(20,20, FlxColor.WHITE);
+		// Player hitbox
+		player.offset.set(player.width/2, player.height/2);
 		add(player);
 
 		//Create the bullets group
@@ -83,17 +93,37 @@ class PlayState extends FlxState
 		}
 
 		//Controls player movement and sets the bounds
-		if(FlxG.keys.pressed.A && player.x > 0){
-			player.x-=2;
+		if(FlxG.keys.pressed.A){
+			if (player.x - speed > player.width/2){
+				player.x -= speed;
+			}
+			else {
+				player.x = player.width;
+			}
 		}
-		if(FlxG.keys.pressed.D && player.x < (FlxG.width - player.width)){
-			player.x+=2;
+		if(FlxG.keys.pressed.D){
+			if (player.x + speed < (FlxG.width - player.width/2)){
+				player.x += speed;
+			}
+			else {
+				player.x = FlxG.width - player.width/2;
+			}
 		}
-		if(FlxG.keys.pressed.W && player.y > 0){
-			player.y-=2;
+		if(FlxG.keys.pressed.W){
+			if (player.y - speed > player.height/2){
+				player.y -= speed;
+			}
+			else {
+				player.y = player.height;
+			}
 		}
-		if(FlxG.keys.pressed.S && player.y < (FlxG.height - player.height)){
-			player.y+=2;
+		if(FlxG.keys.pressed.S){
+			if (player.y + speed < (FlxG.height - player.height/2)){
+				player.y += speed;
+			}
+			else {
+				player.y = FlxG.height - player.height/2;
+			}
 		}
 
 		//Check if the bullets are out of bounds or touching an enemy
