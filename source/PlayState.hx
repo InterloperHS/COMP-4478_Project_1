@@ -12,33 +12,27 @@ import flixel.math.FlxRandom;
 
 class PlayState extends FlxState
 {
-	var player:FlxSprite;
+	//var player:FlxSprite;
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
 	var random:FlxRandom;
-	var speed:Int;
+	var ammoNum:Int;
+	var ammoBoxes:FlxTypedGroup<FlxSprite>;
+	var ammoBox:FlxSprite;
+	var player:Player;
 	override public function create()
 	{
-		super.create();
+		
 		//Generate a new random key
 		random = new FlxRandom();
 
-		// Get player movement speed from the save file or
-		// use a default value of 5
-		if (FlxG.save.data.speed != null) {
-			speed = FlxG.save.data.speed;
-		} else {
-			speed = 5;
-		}
 		//Create the player and add them to the screen
-		player = new FlxSprite(FlxG.width/2, FlxG.height/2);
-		player.makeGraphic(20,20, FlxColor.WHITE);
-		// Player hitbox
-		player.offset.set(player.width/2, player.height/2);
+		player = new Player(FlxG.width/2, FlxG.height/2);
 		add(player);
 
-		//Create the bullets group
+		//Create the bullets group and set ammo
+		ammoNum = 20;
 		var numBullets:Int = 10;
 		bullets = new FlxTypedGroup(numBullets);
 
@@ -61,6 +55,17 @@ class PlayState extends FlxState
 			enemies.add(enemy);
 		}
 		add(enemies);
+		
+		//Create 10 ammo boxes off screen
+		ammoBoxes = new FlxTypedGroup(10);
+		for(i in 0...10){
+			ammoBox = new FlxSprite(-200,-200);
+			ammoBox.makeGraphic(10,10, FlxColor.BLUE);
+			ammoBox.exists = false;
+			ammoBoxes.add(ammoBox);
+		}
+		add(ammoBoxes);
+		super.create();
 	}
 
 	var angle:Int;
@@ -73,11 +78,12 @@ class PlayState extends FlxState
 		xDist = FlxG.mouse.x - player.x;
 		//Calculate the cotangent to find the angle of the mouse relative to the player
 		//and then convert it from radians to degrees.
-		angle = Std.int(Math.atan(yDist/xDist) * 57.2957795);
+		angle= Std.int(Math.atan(yDist/xDist) * 57.2957795);
 		player.angle = angle;
 
-		if(FlxG.keys.justPressed.SPACE){
+		if(FlxG.keys.justPressed.SPACE && ammoNum > 0){
 			//Create a new bullet at the player and point it the same angle of the player
+			ammoNum--;
 			var bullet:FlxSprite = bullets.recycle();
 			bullet.x = player.x;
 			bullet.y = player.y;
@@ -91,44 +97,12 @@ class PlayState extends FlxState
 			bullet.velocity.y =(yDist / dist) * speed;
 			bullet.velocity.x =(xDist / dist) * speed;
 		}
-
-		//Controls player movement and sets the bounds
-		if(FlxG.keys.pressed.A){
-			if (player.x - speed > player.width/2){
-				player.x -= speed;
-			}
-			else {
-				player.x = player.width;
-			}
-		}
-		if(FlxG.keys.pressed.D){
-			if (player.x + speed < (FlxG.width - player.width/2)){
-				player.x += speed;
-			}
-			else {
-				player.x = FlxG.width - player.width/2;
-			}
-		}
-		if(FlxG.keys.pressed.W){
-			if (player.y - speed > player.height/2){
-				player.y -= speed;
-			}
-			else {
-				player.y = player.height;
-			}
-		}
-		if(FlxG.keys.pressed.S){
-			if (player.y + speed < (FlxG.height - player.height/2)){
-				player.y += speed;
-			}
-			else {
-				player.y = FlxG.height - player.height/2;
-			}
-		}
-
+		
 		//Check if the bullets are out of bounds or touching an enemy
 		bullets.forEachAlive(outOfBounds);
 		FlxG.overlap(bullets, enemies, killEnemies);
+		//Check if player is touching an ammo box
+		FlxG.overlap(ammoBoxes, player, addAmmo);
 
 		//Respawn a testing enemy
 		if(enemies.countLiving() < 1){
@@ -137,6 +111,13 @@ class PlayState extends FlxState
 			enemy.y = random.int(10,FlxG.height);
 		}
 
+		//Respawn an ammo box
+		if(ammoBoxes.countLiving() < 1){
+			var ammo:FlxSprite = ammoBoxes.recycle();
+			ammo.x = random.int(10,FlxG.width);
+			ammo.y = random.int(10,FlxG.height);
+		}
+		trace(ammoNum);
 		super.update(elapsed);
 	}
 
@@ -152,5 +133,11 @@ class PlayState extends FlxState
 		//If a bullet hits an enemy, kill the bullet and enemy
 		bullet.kill();
 		e.kill();
+	}
+
+	public function addAmmo(ammo:FlxObject, p:FlxSprite){
+		//If the player touches an ammo box, kill it and increase their ammo by 5
+		ammo.kill();
+		ammoNum+=5;
 	}
 }
