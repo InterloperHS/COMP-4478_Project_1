@@ -26,6 +26,10 @@ class PlayState extends FlxState
 	var map:FlxOgmo3Loader;
 	var walls:FlxTilemap;
 	var doorGroup:FlxTypedGroup<Door>;
+	var spawnEnemyX:Array<Float> = [];
+	var spawnEnemyY:Array<Float> = [];
+	var spawnAmmoX:Array<Float> = [];
+	var spawnAmmoY:Array<Float> = [];
 
 	override public function create()
 	{		
@@ -82,6 +86,10 @@ class PlayState extends FlxState
 			ammoBoxes.add(ammoBox);
 		}
 		add(ammoBoxes);
+
+		//Entity Placement
+		map.loadEntities(placeEntities, "entities");
+
 		super.create();
 	}
 
@@ -130,15 +138,17 @@ class PlayState extends FlxState
 		//Respawn a testing enemy
 		if(enemies.countLiving() < 1){
 			var enemy:FlxSprite = enemies.recycle();
-			enemy.x = random.int(10,FlxG.width);
-			enemy.y = random.int(10,FlxG.height);
+			var spawnID = random.int(0, spawnEnemyX.length-1);
+			enemy.x = spawnEnemyX[spawnID];
+			enemy.y = spawnEnemyY[spawnID];
 		}
 
 		//Respawn an ammo box
 		if(ammoBoxes.countLiving() < 1){
 			var ammo:FlxSprite = ammoBoxes.recycle();
-			ammo.x = random.int(10,FlxG.width);
-			ammo.y = random.int(10,FlxG.height);
+			var spawnID = random.int(0, spawnAmmoX.length-1);
+			ammo.x = spawnAmmoX[spawnID];
+			ammo.y = spawnAmmoY[spawnID];
 		}
 		trace(ammoNum);
 		super.update(elapsed);
@@ -186,6 +196,13 @@ class PlayState extends FlxState
 				//doorTemp.setPosition(entity.x+4, entity.y+4);
 				//Add it to the door group
 				//doorGroup.add(doorTemp);
+			case "enemySpawn":
+				//Push the x and y coords of each enemy spawn location to their arrays
+				spawnEnemyX.push(entity.x);
+				spawnEnemyY.push(entity.y);
+			case "ammoSpawn":
+				spawnAmmoX.push(entity.x);
+				spawnAmmoY.push(entity.y);
 			//default:
 		}
 	}
