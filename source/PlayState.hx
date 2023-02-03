@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxState;
 import flixel.FlxSprite;
+import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxColor;
 import flixel.input.keyboard.FlxKey;
@@ -9,6 +10,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;
 import flixel.math.FlxRandom;
+import flixel.tile.FlxTilemap;
 
 class PlayState extends FlxState
 {
@@ -21,9 +23,24 @@ class PlayState extends FlxState
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
 	var ammoBox:FlxSprite;
 	var player:Player;
+	var map:FlxOgmo3Loader;
+	var walls:FlxTilemap;
+	var doorGroup:FlxTypedGroup<Door>;
+
 	override public function create()
-	{
-		
+	{		
+		//Load the map data from the Ogmo3 file with the current level data
+		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
+
+		//Load in the tilemap from the tilemap image
+		walls = map.loadTilemap(AssetPaths.temptiles__png, "walls");
+		walls.follow();
+		//Set the behaviour of each tile in the tilemap
+		walls.setTileProperties(1, NONE); //Floor, no collison
+		walls.setTileProperties(2, ANY); //Wall in any direction
+		walls.setTileProperties(3, NONE); //Door
+		add(walls);
+
 		//Generate a new random key
 		random = new FlxRandom();
 
@@ -80,6 +97,12 @@ class PlayState extends FlxState
 		//and then convert it from radians to degrees.
 		angle= Std.int(Math.atan(yDist/xDist) * 57.2957795);
 		player.angle = angle;
+
+		//Player collisions with the tilemap walls
+		FlxG.collide(player, walls);
+
+		//Player overlay detection for doors
+		//FlxG.overlap(player, doorGroup, onEncounterDoor);
 
 		if(FlxG.keys.justPressed.SPACE && ammoNum > 0){
 			//Create a new bullet at the player and point it the same angle of the player
@@ -139,5 +162,45 @@ class PlayState extends FlxState
 		//If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
 		ammoNum+=5;
+	}
+
+	//Function to place entities that were on the entity layer in the Ogmo file
+	public function placeEntities(entity:EntityData){
+		//Entity switch cases
+		switch(entity.name){
+			//Positioning a player entity
+			case "player":
+				//Player placement to default location
+				player.setPosition(entity.x+4, entity.y+4);
+			case "playerSpawnLocation":
+				//Spawn player elsewhere if ENTRY is not 0
+				//This will occur if the player entered a door
+				//It's expected to be near a door
+				if (entity.values.entranceID == Reg.ENTRY){
+					player.setPosition(entity.x+4, entity.y+4);
+				}
+			case "door":
+				//Spawn a door that will have the destination ID and entrance ID
+				//var doorTemp = new Door(entity.values.stateDestID, entity.values.destEntrID);
+				//Set its position
+				//doorTemp.setPosition(entity.x+4, entity.y+4);
+				//Add it to the door group
+				//doorGroup.add(doorTemp);
+			//default:
+		}
+	}
+
+	//Function to call when the player encounters a door
+	public function onEncounterDoor(player:Dynamic, door:Dynamic){
+		//Set entrance value
+		Reg.ENTRY = door.stateEntranceID;
+
+		//Determines which state to go to
+		switch(door.stateDestID){
+			case 2:
+				//FlxG.switchState(new Room002());
+			case 3:
+				//FlxG.switchState(new Room003());
+		}
 	}
 }
