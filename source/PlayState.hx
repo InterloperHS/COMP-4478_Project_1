@@ -4,6 +4,7 @@ import flixel.util.FlxTimer;
 import flixel.ui.FlxBar;
 import flixel.FlxState;
 import flixel.FlxSprite;
+import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxColor;
 import flixel.input.keyboard.FlxKey;
@@ -11,9 +12,6 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;
 import flixel.math.FlxRandom;
-import flixel.math.FlxAngle;
-import flixel.text.FlxText;
-import flixel.effects.FlxFlicker;
 
 class PlayState extends FlxState
 {
@@ -22,34 +20,20 @@ class PlayState extends FlxState
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
 	var random:FlxRandom;
-	var ammoNum:Int;
-	var ammoBoxes:FlxTypedGroup<FlxSprite>;
-	var ammoBox:FlxSprite;
-	var player:Player;
-	var ammoText:FlxText;
-	var pHealthBar:FlxBar;
-	var enemyHealthBars:FlxTypedGroup<FlxBar>;
-	var enemyHealth:FlxBar;
-	var grpWalls:FlxTypedGroup<FlxSprite> = null;
-	var timer:FlxTimer;
 	override public function create()
 	{
-		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
-		
+		super.create();
 		//Generate a new random key
 		random = new FlxRandom();
 
 		timer = new FlxTimer();
 
 		//Create the player and add them to the screen
-		player = new Player(FlxG.width/2, FlxG.height/2);
-		player.health = 100;
+		player = new FlxSprite(FlxG.width/2, FlxG.height/2);
+		player.makeGraphic(20,20, FlxColor.WHITE);
 		add(player);
 
-		
-
-		//Create the bullets group and set ammo
-		ammoNum = 20;
+		//Create the bullets group
 		var numBullets:Int = 10;
 		bullets = new FlxTypedGroup(numBullets);
 
@@ -81,27 +65,6 @@ class PlayState extends FlxState
 
 		}
 		add(enemies);
-		add(enemyHealthBars);
-
-		//Create 10 ammo boxes off screen
-		ammoBoxes = new FlxTypedGroup(10);
-		for(i in 0...10){
-			ammoBox = new FlxSprite(-200,-200);
-			ammoBox.makeGraphic(10,10, FlxColor.BLUE);
-			ammoBox.exists = false;
-			ammoBoxes.add(ammoBox);
-		}
-		add(ammoBoxes);
-
-		//Ammo display
-		ammoText = new FlxText(0,FlxG.height-24,FlxG.width, "Ammo: " + ammoNum, 16);
-		ammoText.setFormat(null,16,FlxColor.WHITE,FlxTextAlign.LEFT);
-		add(ammoText);
-
-		pHealthBar = new FlxBar(FlxG.width - 210, FlxG.height -24,LEFT_TO_RIGHT,200,20,player,"health", 0, 100, false);
-		add(pHealthBar);
-
-		super.create();
 	}
 
 	var angle:Float;
@@ -115,13 +78,11 @@ class PlayState extends FlxState
 		xDist = FlxG.mouse.x - player.x;
 		//Calculate the cotangent to find the angle of the mouse relative to the player
 		//and then convert it from radians to degrees.
-		angle = FlxAngle.angleBetweenMouse(player, true);
+		angle = Std.int(Math.atan(yDist/xDist) * 57.2957795);
+		player.angle = angle;
 
-		if(FlxG.mouse.justPressed && ammoNum > 0){
+		if(FlxG.keys.justPressed.SPACE){
 			//Create a new bullet at the player and point it the same angle of the player
-			ammoNum--;
-			
-			
 			var bullet:FlxSprite = bullets.recycle();
 			bullet.x = player.x;
 			bullet.y = player.y;
@@ -139,22 +100,12 @@ class PlayState extends FlxState
 		//Check if the bullets are out of bounds or touching an enemy
 		bullets.forEachAlive(outOfBounds);
 		FlxG.overlap(bullets, enemies, killEnemies);
-		//Check if player is touching an ammo box
-		FlxG.overlap(ammoBoxes, player, addAmmo);
-		
-		FlxG.overlap(player, enemies, hurtPlayer);
-		
+
 		//Respawn a testing enemy
 		if(enemies.countLiving() < 1){
 			var enemy:FlxSprite = enemies.recycle();
-			var eHealth:FlxBar = enemyHealthBars.recycle();
-
 			enemy.x = random.int(10,FlxG.width);
 			enemy.y = random.int(10,FlxG.height);
-
-			//Set the enemy health bar to follow the enemy we just spawned
-			eHealth.setParent(enemy, "health", true, Std.int(eHealth.width/2 - enemy.width/2) * -1 , -12);
-			trace(enemy.getPosition());
 		}
 		
 		//Respawn an ammo box
@@ -166,12 +117,20 @@ class PlayState extends FlxState
 		//Update the ammo display text
 		ammoText.text = "Ammo: " + Std.string(ammoNum);
 
+		//Respawn an ammo box
+		if(ammoBoxes.countLiving() < 1){
+			var ammo:FlxSprite = ammoBoxes.recycle();
+			var spawnID = random.int(0, spawnAmmoX.length-1);
+			ammo.x = spawnAmmoX[spawnID];
+			ammo.y = spawnAmmoY[spawnID];
+		}
+		trace(ammoNum);
 		super.update(elapsed);
 	}
 
 	public function outOfBounds(bullet:FlxObject){
 		//If the bullet is out of bounds, kill it
-		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width){
+		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width || /*FlxG.collide(bullet, walls)*/){
 			bullet.kill();
 		}
 
@@ -180,32 +139,6 @@ class PlayState extends FlxState
 	public function killEnemies(bullet:FlxObject, e:FlxSprite){
 		//If a bullet hits an enemy, kill the bullet and enemy
 		bullet.kill();
-		trace(e.health);
-		
-		//
-		e.health-=25;
-		if(e.health<=0){
-			e.kill();
-		}
-	}
-
-	public function hurtPlayer(p:Player, e:FlxObject){
-		trace(p.health);
-		FlxG.camera.flash(FlxColor.WHITE,1);
-		
-		FlxG.collide(p,e);
-		if(!FlxFlicker.isFlickering(p)){
-			p.health -=25;
-			if(p.health<=0){
-				p.kill();
-			}
-		}
-		FlxFlicker.flicker(p); 
-	}
-
-	public function addAmmo(ammo:FlxObject, p:FlxSprite){
-		//If the player touches an ammo box, kill it and increase their ammo by 5
-		ammo.kill();
-		ammoNum+=5;
+		e.kill();
 	}
 }
