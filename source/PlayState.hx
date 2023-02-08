@@ -156,7 +156,7 @@ class PlayState extends FlxState
 
 	public function outOfBounds(bullet:FlxObject){
 		//If the bullet is out of bounds, kill it
-		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width || FlxG.collide(bullet, walls)){
+		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width || /*FlxG.collide(bullet, walls)*/){
 			bullet.kill();
 		}
 
