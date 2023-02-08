@@ -41,7 +41,7 @@ class Player extends FlxSprite{
         animation.add("idleR", [24], 5, true);
         animation.add("idleDR", [28], 5, true);
 		
-        scale.set(3,3);
+        //scale.set(3,3);
         updateHitbox();
     }
 

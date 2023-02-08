@@ -45,6 +45,8 @@ class PlayState extends FlxState
 	{
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
 
+		
+
 		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
 
 		//Load in the tilemap from the tilemap image
@@ -65,7 +67,7 @@ class PlayState extends FlxState
 		player.health = 100;
 		add(player);
 
-		
+		FlxG.camera.follow(player, TOPDOWN, 1);
 
 		//Create the bullets group and set ammo
 		ammoNum = 20;
