@@ -15,32 +15,41 @@
       "gridCellsX": 40,
       "gridCellsY": 30,
       "entities": [
-        {"name": "player", "id": 0, "_eid": "18542617", "x": 240, "y": 208, "originX": 0, "originY": 0},
         {
           "name": "playerSpawnLocation",
           "id": 1,
           "_eid": "20439586",
-          "x": 352,
+          "x": 304,
           "y": 208,
           "originX": 0,
           "originY": 0,
           "values": {"entranceID": 1}
         },
+        {"name": "ammoSpawn", "id": 3, "_eid": "38674929", "x": 48, "y": 336, "originX": 0, "originY": 0},
+        {"name": "ammoSpawn", "id": 4, "_eid": "38674929", "x": 48, "y": 208, "originX": 0, "originY": 0},
+        {"name": "ammoSpawn", "id": 5, "_eid": "38674929", "x": 416, "y": 336, "originX": 0, "originY": 0},
+        {"name": "ammoSpawn", "id": 6, "_eid": "38674929", "x": 224, "y": 336, "originX": 0, "originY": 0},
+        {"name": "ammoSpawn", "id": 7, "_eid": "38674929", "x": 416, "y": 208, "originX": 0, "originY": 0},
+        {
+          "name": "playerSpawnLocation",
+          "id": 8,
+          "_eid": "20439586",
+          "x": 224,
+          "y": 208,
+          "originX": 0,
+          "originY": 0,
+          "values": {"entranceID": 0}
+        },
         {
           "name": "door",
-          "id": 2,
+          "id": 9,
           "_eid": "20632437",
           "x": 352,
           "y": 176,
           "originX": 0,
           "originY": 0,
           "values": {"stateDestID": 3, "destEntrID": 2}
-        },
-        {"name": "ammoSpawn", "id": 3, "_eid": "38674929", "x": 48, "y": 336, "originX": 0, "originY": 0},
-        {"name": "ammoSpawn", "id": 4, "_eid": "38674929", "x": 48, "y": 208, "originX": 0, "originY": 0},
-        {"name": "ammoSpawn", "id": 5, "_eid": "38674929", "x": 416, "y": 336, "originX": 0, "originY": 0},
-        {"name": "ammoSpawn", "id": 6, "_eid": "38674929", "x": 224, "y": 336, "originX": 0, "originY": 0},
-        {"name": "ammoSpawn", "id": 7, "_eid": "38674929", "x": 416, "y": 208, "originX": 0, "originY": 0}
+        }
       ]
     },
     {

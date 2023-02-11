@@ -19,7 +19,7 @@ import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
 
-class PlayState extends FlxState
+class Room02 extends FlxState
 {
 	//var player:FlxSprite;
 	var bullets:FlxTypedGroup<FlxSprite>;
@@ -44,7 +44,7 @@ class PlayState extends FlxState
 	var spawnEnemyY:Array<Float> = [];
 	var spawnAmmoX:Array<Float> = [];
 	var spawnAmmoY:Array<Float> = [];
-	var roomID:Int = 0;
+	var roomID:Int = 2;
 
 	var uiCamera:FlxCamera;
 	var hud:HUD;
@@ -55,7 +55,7 @@ class PlayState extends FlxState
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
 
 		//Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map00__json);
+		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map02__json);
 
 		//Show the hitboxes of game objects
 		//FlxG.debugger.drawDebug = true;
@@ -268,6 +268,9 @@ class PlayState extends FlxState
 		//Entity switch cases
 		switch(entity.name){
 			//Positioning a player entity
+			case "player":
+				//Player placement to default location
+				player.setPosition(entity.x+4, entity.y+4);
 			case "playerSpawnLocation":
 				//Spawn player elsewhere if ENTRY is not 0
 				//This will occur if the player entered a door

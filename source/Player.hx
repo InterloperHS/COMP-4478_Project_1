@@ -14,15 +14,15 @@ class Player extends FlxSprite{
     public function new(x:Float=0, y:Float=0){
         //Create a constructor for the Player class
         super(x,y);
-        makeGraphic(16,16, FlxColor.WHITE);
+        
+        //Create the sprite and load the spritesheet
+		var spritesheet = new FlxSprite();
+		loadGraphic(AssetPaths.walking__png,true, 16, 16);
+
         setSize(8,8);
         offset.x = 4;
         offset.y = 4;
         drag.x = drag.y = 800;
-
-        //Create the sprite and load the spritesheet
-		var spritesheet = new FlxSprite();
-		loadGraphic(AssetPaths.walking__png,true, 16, 16);
 
 		//Create the walk animations
 		animation.add("walkD", [0,1,2,3], 5, true);
@@ -44,8 +44,6 @@ class Player extends FlxSprite{
         animation.add("idleR", [24], 5, true);
         animation.add("idleDR", [28], 5, true);
 		
-        //scale.set(3,3);
-        updateHitbox();
     }
 
     function updateMovement(){ 
