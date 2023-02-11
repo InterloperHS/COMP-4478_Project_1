@@ -13,7 +13,7 @@ import flixel.FlxObject;
 import flixel.math.FlxRandom;
 import flixel.tile.FlxTilemap;
 
-class PlayState extends FlxState
+class Room01 extends FlxState
 {
 	//var player:FlxSprite;
 	var bullets:FlxTypedGroup<FlxSprite>;
@@ -36,7 +36,7 @@ class PlayState extends FlxState
 	override public function create()
 	{		
 		//Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map00__json);
+		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map01__json);
 
 		//Show the hitboxes of game objects
 		FlxG.debugger.drawDebug = true;

@@ -11,7 +11,10 @@ class Player extends FlxSprite{
     public function new(x:Float=0, y:Float=0){
         //Create a constructor for the Player class
         super(x,y);
-        makeGraphic(20,20, FlxColor.WHITE);
+        makeGraphic(16,16, FlxColor.WHITE);
+        setSize(8,8);
+        offset.x = 4;
+        offset.y = 4;
         drag.x = drag.y = 800;
         
     }
