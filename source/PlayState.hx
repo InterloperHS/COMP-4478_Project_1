@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxPoint;
 import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -34,15 +35,13 @@ class PlayState extends FlxState
 	override public function create()
 	{		
 		//Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
+		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map01__json);
 
 		//Load in the tilemap from the tilemap image
-		walls = map.loadTilemap(AssetPaths.temptiles__png, "walls");
+		walls = map.loadTilemap(AssetPaths.dungeon_tiles__png, "walls");
 		walls.follow();
-		//Set the behaviour of each tile in the tilemap
-		walls.setTileProperties(1, NONE); //Floor, no collison
-		walls.setTileProperties(2, ANY); //Wall in any direction
-		walls.setTileProperties(3, NONE); //Door
+		//Setting tilemap collision properties
+		tilePropertySetting(walls);
 		add(walls);
 
 		//Generate a new random key
@@ -156,7 +155,7 @@ class PlayState extends FlxState
 
 	public function outOfBounds(bullet:FlxObject){
 		//If the bullet is out of bounds, kill it
-		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width || FlxG.collide(bullet, walls)){
+		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width){
 			bullet.kill();
 		}
 
@@ -218,6 +217,23 @@ class PlayState extends FlxState
 				//FlxG.switchState(new Room002());
 			case 3:
 				//FlxG.switchState(new Room003());
+		}
+	}
+
+	//Function to call for setting tile properties
+	public function tilePropertySetting(theTilemap:FlxTilemap){
+		//For anything that doesn't have a tile, make it a wall in any direction
+		theTilemap.setTileProperties(0, ANY);
+
+		//Default everything else to have no collision
+		for(i in 1...552){
+			theTilemap.setTileProperties(i, NONE);
+		}
+
+		//Setting things to not be able to collide in any direction
+		var anyTiles:Array<Int> = [116,117,118,119,120,231,232,233,369,370,371];
+		for(i in anyTiles){
+			theTilemap.setTileProperties(i, ANY);
 		}
 	}
 }
