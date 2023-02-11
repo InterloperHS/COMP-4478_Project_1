@@ -17,9 +17,13 @@ class PlayState extends FlxState
 {
 	//var player:FlxSprite;
 	var bullets:FlxTypedGroup<FlxSprite>;
+	var bullets2:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
+	var enemies2:FlxTypedGroup<FlxSprite>;
+	var enemies3:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
 	var enemy2:FlxSprite;
+	var rangedEnemy:FlxSprite;
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -33,7 +37,9 @@ class PlayState extends FlxState
 	var spawnAmmoX:Array<Float> = [];
 	var spawnAmmoY:Array<Float> = [];
 	var timerStart:Bool = false;
-	var maxTimerCounter:Float = 0.25;
+	var timerStart2:Bool = false;
+	var moving:Bool = false;
+	var attackRan:Int;
 
 	override public function create()
 	{		
@@ -72,6 +78,17 @@ class PlayState extends FlxState
 		}
 		add(bullets);
 
+		//generates the enemies bullets for the ranged enemies
+		var sprite2:FlxSprite;
+		var numBullets2:Int = 10;
+		bullets2 = new FlxTypedGroup(numBullets2);
+		for(i in 0...numBullets2){
+			sprite2 = new FlxSprite(-100,-100);
+			sprite2.makeGraphic(15, 10, FlxColor.ORANGE);
+			sprite2.exists = false;
+			bullets2.add(sprite2);
+		}
+		add(bullets2);
 		//Create 10 enemies off screen
 		enemies = new FlxTypedGroup(10);
 		for(i in 0...10){
@@ -79,12 +96,27 @@ class PlayState extends FlxState
 			enemy.makeGraphic(10,10, FlxColor.RED);
 			enemy.exists = false;
 			enemies.add(enemy);
+		}
+		//create 10 large enemies
+		add(enemies);
+		enemies2 = new FlxTypedGroup(10);
+		for(i in 0...10){
 			enemy2 = new FlxSprite(-200,-200);
 			enemy2.makeGraphic(40,40, FlxColor.GREEN);
 			enemy2.exists = false;
-			enemies.add(enemy2);
+			enemies2.add(enemy2);
 		}
-		add(enemies);
+		//create 10 ranged enemies
+		add(enemies2);
+		enemies3 = new FlxTypedGroup(10);
+		for(i in 0...10){
+			rangedEnemy = new FlxSprite(-200,-200);
+			rangedEnemy.makeGraphic(10,10, FlxColor.YELLOW);
+			rangedEnemy.exists = false;
+			enemies3.add(rangedEnemy);
+		}
+		add(enemies3);
+
 		
 		//Create 10 ammo boxes off screen
 		ammoBoxes = new FlxTypedGroup(10);
@@ -122,6 +154,8 @@ class PlayState extends FlxState
 		//Player collisions with the tilemap walls
 		FlxG.collide(player, walls);
 		FlxG.collide(enemy, walls);
+		FlxG.collide(enemy2, walls);
+
 
 		//Player overlay detection for doors
 		FlxG.overlap(player, doorGroup, onEncounterDoor);
@@ -145,14 +179,45 @@ class PlayState extends FlxState
 		
 		//Check if the bullets are out of bounds or touching an enemy
 		bullets.forEachAlive(outOfBounds);
+		bullets2.forEachAlive(outOfBounds);
 		FlxG.overlap(bullets, enemies, killEnemies);
+		FlxG.overlap(bullets, enemies2, killEnemies);
+		FlxG.overlap(bullets, enemies3, killEnemies);
+		FlxG.overlap(bullets2, player, deleteEnemyBullet);
 		if(timerStart == false){
 			enemyMovement(enemy, player, 50);
 			enemyMovement(enemy2, player, 25);
 			timerFunction(new FlxTimer());
 		}
+
+		//calculates the enemies projectiles
+		var enemyProjectileDistX:Float;
+		var enemyProjectileDistY:Float;
+		var enemyProjectileAngle:Float;
+		if(timerStart2 == false){
+			enemyProjectileDistX = player.x - rangedEnemy.x;
+			enemyProjectileDistY = player.y - rangedEnemy.y;
+
+			enemyProjectileAngle= Std.int(Math.atan(enemyProjectileDistY/enemyProjectileDistX) * 57.2957795);
+			rangedEnemy.angle = enemyProjectileAngle;
+
+			var enemyBullet:FlxSprite = bullets2.recycle();
+			enemyBullet.x = rangedEnemy.x;
+			enemyBullet.y = rangedEnemy.y;
+			enemyBullet.angle = enemyProjectileAngle;
+
+			var speed = 300;
+			var distance = Math.sqrt((enemyProjectileDistX * enemyProjectileDistX) + (enemyProjectileDistY * enemyProjectileDistY));
+
+			enemyBullet.velocity.y = (enemyProjectileDistY / distance) * speed;
+			enemyBullet.velocity.x = (enemyProjectileDistX / distance) * speed;
+
+			
+			shootTimer(new FlxTimer());
+		}
 		//Check if player is touching an ammo box
 		FlxG.overlap(ammoBoxes, player, addAmmo);
+		FlxG.overlap(bullets2, player, addAmmo);
 
 		//Respawn a testing enemy
 		if(enemies.countLiving() < 1){
@@ -160,6 +225,18 @@ class PlayState extends FlxState
 			var spawnID = random.int(0, spawnEnemyX.length-1);
 			enemy.x = spawnEnemyX[spawnID];
 			enemy.y = spawnEnemyY[spawnID];
+		}
+		if(enemies2.countLiving() < 1){
+			enemy2 = enemies2.recycle();
+			var spawnID = random.int(0, spawnEnemyX.length-1);
+			enemy2.x = spawnEnemyX[spawnID];
+			enemy2.y = spawnEnemyY[spawnID];
+		}
+		if(enemies3.countLiving() < 1){
+			rangedEnemy = enemies3.recycle();
+			var spawnID = random.int(0, spawnEnemyX.length-1);
+			rangedEnemy.x = spawnEnemyX[spawnID];
+			rangedEnemy.y = spawnEnemyY[spawnID];
 		}
 		//Respawn an ammo box
 		if(ammoBoxes.countLiving() < 1){
@@ -192,8 +269,12 @@ class PlayState extends FlxState
 		ammo.kill();
 		ammoNum+=5;
 	}
-	
-	//controls the basic movement of the enemy towards the player
+
+	public function deleteEnemyBullet(b:FlxObject, p:FlxSprite){
+		b.kill();
+	}
+
+	//calculates where the enemy should move
 	public function enemyMovement(e:FlxSprite, p:FlxSprite, speed:Float){
 			if(e.x != p.x && e.y != p.y && timerStart == false){
 				timerStart = false;
@@ -206,14 +287,23 @@ class PlayState extends FlxState
 				e.velocity.x = (enemyDistX / enemyDist) * -speed;
 			}
 	}
-	
-	//timers used so that ais only change direction every 1/4th of a second
+
+	//timers for the basic movement
 	function timerFunction(Timer:FlxTimer) : Void{
 			timerStart = true;
 			Timer.start(0.25, timerStop);
 	}
 	function timerStop(Timer:FlxTimer) : Void{
 		timerStart = false;
+	}
+
+	//timers for the enemies to shoot
+	function shootTimer(Timer:FlxTimer) : Void{
+			timerStart2 = true;
+			Timer.start(2, shootTimerStop);
+	}
+	function shootTimerStop(Timer:FlxTimer) : Void{
+		timerStart2 = false;
 	}
 
 	//Function to place entities that were on the entity layer in the Ogmo file
