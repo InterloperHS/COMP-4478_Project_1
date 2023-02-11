@@ -74,11 +74,11 @@ class Room05 extends FlxState
 
 		//Create the player and add them to the screen
 		player = new Player(FlxG.width/2, FlxG.height/2);
-		player.health = 100;
+		player.health = Reg.PLAYERHEALTH;
 		add(player);
 
 		//Create the bullets group and set ammo
-		ammoNum = 20;
+		ammoNum = Reg.AMMO;
 		var numBullets:Int = 10;
 		bullets = new FlxTypedGroup(numBullets);
 
@@ -128,6 +128,7 @@ class Room05 extends FlxState
 		if(FlxG.mouse.justPressed && ammoNum > 0){
 			//Create a new bullet at the player and point it the same angle of the player
 			ammoNum--;
+			Reg.AMMO = ammoNum;
 			
 			//Calculate y diff and x diff of the mouse and player
 			yDist = FlxG.mouse.y - player.y;
@@ -190,6 +191,7 @@ class Room05 extends FlxState
 		//If they were not already just hit, subtract health and check if they should be killed
 		if(!FlxFlicker.isFlickering(p)){
 			p.health -=25;
+			Reg.PLAYERHEALTH = p.health;
 			if(p.health<=0){
 				p.kill();
 			}
@@ -202,6 +204,7 @@ class Room05 extends FlxState
 		//If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
 		ammoNum+=5;
+		Reg.AMMO = ammoNum;
 	}
 
 	public function destroyBullets(b:FlxSprite, w:FlxTilemap){
@@ -327,9 +330,21 @@ class Room05 extends FlxState
 		}
 
 		//Setting things to not be able to collide in any direction
-		var anyTiles:Array<Int> = [116,117,118,119,120,231,232,233,369,370,371, 14,15,16,17,18,19, 38,39,40,41,42,43, 62,63,64,65,66,67];
+		var anyTiles:Array<Int> = [116,117,118,119,120, 185,186,187, 208,209,210, 231,232,233, 369,370,371, 13,14,15,16,17,18, 37,38,39,40,41,42, 61,62,63,64,65,66];
 		for(i in anyTiles){
 			theTilemap.setTileProperties(i, ANY);
+		}
+
+		//Setting things for the left side
+		var leftTiles:Array<Int> = [1, 24, 47, 70, 93];
+		for(i in leftTiles){
+			theTilemap.setTileProperties(i, LEFT);
+		}
+
+		//Setting things for the right side
+		var rightTiles:Array<Int> = [5, 28, 51, 74, 97];
+		for(i in rightTiles){
+			theTilemap.setTileProperties(i, RIGHT);
 		}
 	}
 }
