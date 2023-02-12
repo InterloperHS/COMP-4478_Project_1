@@ -21,30 +21,41 @@ import flixel.effects.FlxFlicker;
 
 class PlayState extends FlxState
 {
-	//var player:FlxSprite;
+	//Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
+	var bullets2:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
+	var bigEnemies:FlxTypedGroup<FlxSprite>;
+	var rangedEnemies:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
+	var enemy2:FlxSprite;
+	var rangedEnemy:FlxSprite;
+	var spawnEnemyX:Array<Float> = [];
+	var spawnEnemyY:Array<Float> = [];
+	var spawnEnemyType:Array<Int> = [];
+	var enemyHealthBars:FlxTypedGroup<FlxBar>;
+	var enemyHealth:FlxBar;
+
+	var roomID:Int = 0;	
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
 	var ammoBox:FlxSprite;
+	var spawnAmmoX:Array<Float> = [];
+	var spawnAmmoY:Array<Float> = [];
 	var player:Player;
 	var ammoText:FlxText;
 	var pHealthBar:FlxBar;
-	var enemyHealthBars:FlxTypedGroup<FlxBar>;
-	var enemyHealth:FlxBar;
 	var grpWalls:FlxTypedGroup<FlxSprite> = null;
 	var timer:FlxTimer;
 	var map:FlxOgmo3Loader;
 	var walls:FlxTilemap;
 	var doorGroup:FlxTypedGroup<Door>;
 
-	var spawnEnemyX:Array<Float> = [];
-	var spawnEnemyY:Array<Float> = [];
-	var spawnAmmoX:Array<Float> = [];
-	var spawnAmmoY:Array<Float> = [];
-	var roomID:Int = 0;
+	var timerStart:Bool = false;
+	var timerStart2:Bool = false;
+	var moving:Bool = false;
+	var attackRan:Int;
 
 	var uiCamera:FlxCamera;
 	var hud:HUD;
@@ -96,6 +107,28 @@ class PlayState extends FlxState
 		doorGroup = new FlxTypedGroup();
 		add(doorGroup);
 
+		//generates the enemies bullets for the ranged enemies
+		var sprite2:FlxSprite;
+		var numBullets2:Int = 10;
+		bullets2 = new FlxTypedGroup(numBullets2);
+		for(i in 0...numBullets2){
+			sprite2 = new FlxSprite(-100,-100);
+			sprite2.makeGraphic(15, 10, FlxColor.ORANGE);
+			sprite2.exists = false;
+			bullets2.add(sprite2);
+		}
+		add(bullets2);
+		
+		//Create 10 ammo boxes off screen
+		ammoBoxes = new FlxTypedGroup(10);
+		for(i in 0...10){
+			ammoBox = new FlxSprite(-200,-200);
+			ammoBox.makeGraphic(10,10, FlxColor.BLUE);
+			ammoBox.exists = false;
+			ammoBoxes.add(ammoBox);
+		}
+		add(ammoBoxes);
+
 		//Entity Placement
 		map.loadEntities(placeEntities, "entities");
 		spawnEnemies();
@@ -112,15 +145,18 @@ class PlayState extends FlxState
 	var angle:Float;
 	var xDist:Float;
 	var yDist:Float;
-
+	var enemyDistX:Float;
+	var enemyDistY:Float;
+	var enemyAngle:Int;
 	override public function update(elapsed:Float)
 	{	
 		//Calculate the angle of the mouse relative to the player
 		angle = FlxAngle.angleBetweenMouse(player, true);
 
-		//Player collisions with the tilemap walls
+		//Player & enemy collisions with the tilemap walls
 		FlxG.collide(player, walls);
-		FlxG.collide(enemies, walls);
+		FlxG.collide(enemy, walls);
+		FlxG.collide(enemy2, walls);
 
 		//Player overlay detection for doors
 		FlxG.overlap(player, doorGroup, onEncounterDoor);
@@ -149,16 +185,61 @@ class PlayState extends FlxState
 		}
 		
 		//Check if the bullets are out of bounds or touching an enemy
+		bullets.forEachAlive(outOfBounds);
+		bullets2.forEachAlive(outOfBounds);
 		FlxG.overlap(bullets, enemies, killEnemies); 
+		FlxG.overlap(bullets, bigEnemies, killEnemies);
+		FlxG.overlap(bullets, rangedEnemies, killEnemies);
+
 		//Check if player is touching an ammo box
 		FlxG.overlap(ammoBoxes, player, addAmmo);
+
 		//Check if player is touching an enemy
 		FlxG.overlap(player, enemies, hurtPlayer);
+
 		//Check if bullets are touching walls
 		//FlxG.collide(bullets, walls, destroyBullets);
 
 		//Update the ammo display text
 		hud.updateHUD(ammoNum);
+		
+		//Start timer for movement of enemy
+		if(timerStart == false){
+			enemyMovement(enemy, player, 50);
+			enemyMovement(enemy2, player, 25);
+			timerFunction(new FlxTimer());
+		}
+
+		//calculates the enemies projectiles
+		var enemyProjectileDistX:Float;
+		var enemyProjectileDistY:Float;
+		var enemyProjectileAngle:Float;
+		if(timerStart2 == false){
+			enemyProjectileDistX = player.x - rangedEnemy.x;
+			enemyProjectileDistY = player.y - rangedEnemy.y;
+
+			enemyProjectileAngle= Std.int(Math.atan(enemyProjectileDistY/enemyProjectileDistX) * 57.2957795);
+			rangedEnemy.angle = enemyProjectileAngle;
+
+			var enemyBullet:FlxSprite = bullets2.recycle();
+			enemyBullet.x = rangedEnemy.x;
+			enemyBullet.y = rangedEnemy.y;
+			enemyBullet.angle = enemyProjectileAngle;
+
+			var speed = 300;
+			var distance = Math.sqrt((enemyProjectileDistX * enemyProjectileDistX) + (enemyProjectileDistY * enemyProjectileDistY));
+
+			enemyBullet.velocity.y = (enemyProjectileDistY / distance) * speed;
+			enemyBullet.velocity.x = (enemyProjectileDistX / distance) * speed;
+
+			shootTimer(new FlxTimer());
+		}
+
+		//Check if player is touching an ammo box
+		FlxG.overlap(ammoBoxes, player, addAmmo);
+
+		//Check if player is hit by enemy bullet
+		FlxG.overlap(bullets2, player, hurtPlayerRanged);
 
 		super.update(elapsed);
 	}
@@ -200,6 +281,24 @@ class PlayState extends FlxState
 		FlxFlicker.flicker(p); 
 	}
 
+	public function hurtPlayerRanged(p:Player, b:FlxObject){
+		//Flash the camera so the player knows they were hit
+		FlxG.camera.flash(FlxColor.WHITE,1);
+
+		//If they were not already just hit, subtract health and check if they should be killed
+		if(!FlxFlicker.isFlickering(p)){
+			p.health -=25;
+			Reg.PLAYERHEALTH = p.health;
+			if(p.health<=0){
+				p.kill();
+			}
+		}
+
+		b.kill();
+		//Flicker the Player sprite to give player "immunity" for a frew seconds
+		FlxFlicker.flicker(p);
+	}
+
 	public function addAmmo(ammo:FlxObject, p:FlxSprite){
 		//If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
@@ -216,10 +315,14 @@ class PlayState extends FlxState
 		//Create enemy group and enemy health bar group
 		enemyHealthBars = new FlxTypedGroup(spawnEnemyX.length);
 		enemies = new FlxTypedGroup(spawnEnemyX.length);
-
+		bigEnemies = new FlxTypedGroup(spawnEnemyX.length);
+		rangedEnemies = new FlxTypedGroup(spawnEnemyX.length);
 		add(enemies);
+		add(bigEnemies);
+		add(rangedEnemies);
 		add(enemyHealthBars);
-		//If there are enemies to spawn from registry
+
+		//Check if there are enemies to spawn from registry
 		if(Reg.ENEMIES[roomID] != 0){
 			//Check to see if we have less enemies killed in this room already
 			var spawnAmount:Int = (Reg.ENEMIES[roomID] < spawnEnemyX.length) ? Reg.ENEMIES[roomID] : spawnEnemyX.length;
@@ -227,20 +330,40 @@ class PlayState extends FlxState
 
 			//Create as many enemies and health bars as there are spawning locations
 			for(i in 0...(spawnAmount)){
-				enemy = new FlxSprite(-200,-200);
-				enemy.makeGraphic(10,10, FlxColor.RED);
-				enemy.exists = true;
-				enemy.health = 100;
+				//Check which enemy type the spawner is
+				switch(spawnEnemyType[i]){
+					//Normal Enemies
+					case 0:
+						enemy = new FlxSprite(-200,-200);
+						enemy.makeGraphic(10,10, FlxColor.RED);
+						enemy.exists = true;
+						enemy.health = 100;
+						enemies.add(enemy);
+					//Ranged Enemies
+					case 1:
+						enemy = new FlxSprite(-200,-200);
+						enemy.makeGraphic(10,10, FlxColor.YELLOW);
+						enemy.exists = false;
+						rangedEnemies.add(enemy);
+					//Large Enemies
+					case 2:
+						enemy = new FlxSprite(-200,-200);
+						enemy.makeGraphic(40,40, FlxColor.GREEN);
+						enemy.exists = false;
+						bigEnemies.add(enemy);
+						
+				}
 
-				enemyHealth = new FlxBar(enemy.x,enemy.y,LEFT_TO_RIGHT,100,10,enemy,"health", 0, 100, false);
+				enemyHealth = new FlxBar(enemy.x,enemy.y,LEFT_TO_RIGHT,100,10,enemy,"health", 0, enemy.health, false);
 				enemyHealth.exists = true;
 				enemyHealth.killOnEmpty = true;
 
 				//Set the enemy health bar to follow the enemy we just spawned
 				enemyHealth.setParent(enemy, "health", true, Std.int(enemyHealth.width/2 - enemy.width/2) * -1 , -12);
 
-				enemies.add(enemy);
+				//enemies.add(enemy);
 				enemyHealthBars.add(enemyHealth);
+
 				//Set enemy to the i spawn location
 				enemy.x = spawnEnemyX[i];
 				enemy.y = spawnEnemyY[i];
@@ -266,6 +389,41 @@ class PlayState extends FlxState
 		
 	}
 
+	public function deleteEnemyBullet(b:FlxObject, p:FlxSprite){
+		b.kill();
+	}
+
+	//calculates where the enemy should move
+	public function enemyMovement(e:FlxSprite, p:FlxSprite, speed:Float){
+		if(e.x != p.x && e.y != p.y && timerStart == false){
+			timerStart = false;
+			enemyDistX = e.x - p.x;
+			enemyDistY = e.y - p.y;
+			e.angle = angle;
+			var enemyDist = Math.sqrt((enemyDistX*enemyDistX) + (enemyDistY*enemyDistY));
+			e.velocity.y = (enemyDistY / enemyDist) * -speed;
+			e.velocity.x = (enemyDistX / enemyDist) * -speed;
+		}
+	}
+
+	//timers for the basic movement for enemies
+	function timerFunction(Timer:FlxTimer) : Void{
+		timerStart = true;
+		Timer.start(0.25, timerStop);
+	}
+	function timerStop(Timer:FlxTimer) : Void{
+		timerStart = false;
+	}
+
+	//timers for the enemies to shoot
+	function shootTimer(Timer:FlxTimer) : Void{
+		timerStart2 = true;
+		Timer.start(2, shootTimerStop);
+	}
+	function shootTimerStop(Timer:FlxTimer) : Void{
+		timerStart2 = false;
+	}
+
 	//Function to place entities that were on the entity layer in the Ogmo file
 	public function placeEntities(entity:EntityData){
 		//Entity switch cases
@@ -289,10 +447,10 @@ class PlayState extends FlxState
 				//Push the x and y coords of each enemy spawn location to their arrays
 				spawnEnemyX.push(entity.x);
 				spawnEnemyY.push(entity.y);
+				spawnEnemyType.push(entity.values.enemyType);
 			case "ammoSpawn":
 				spawnAmmoX.push(entity.x);
 				spawnAmmoY.push(entity.y);
-			//default:
 		}
 		
 	}
