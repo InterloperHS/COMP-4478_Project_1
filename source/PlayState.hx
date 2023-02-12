@@ -45,17 +45,16 @@ class PlayState extends FlxState
 	var spawnEnemyY:Array<Float> = [];
 	var spawnAmmoX:Array<Float> = [];
 	var spawnAmmoY:Array<Float> = [];
-  var uiCamera:FlxCamera;
+  	var uiCamera:FlxCamera;
 	var hud:HUD;
 	var levelText:FlxText;
+	var timerStart:Bool = false;
+	var maxTimerCounter:Float = 0.25;
 
 	override public function create()
 	{		
     //Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
-
-	  var timerStart:Bool = false;
-	  var maxTimerCounter:Float = 0.25;
     
 		//Load the map data from the Ogmo3 file with the current level data
 		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
@@ -225,6 +224,7 @@ class PlayState extends FlxState
 	
 	//controls the basic movement of the enemy towards the player
 	public function enemyMovement(e:FlxSprite, p:FlxSprite, speed:Float){
+		var enemyDistX:Float, enemyDistY:Float, enemyAngle:Int;
 			if(e.x != p.x && e.y != p.y && timerStart == false){
 				timerStart = false;
 				enemyDistX = e.x - p.x;
