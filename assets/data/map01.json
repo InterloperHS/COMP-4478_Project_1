@@ -25,12 +25,38 @@
           "originY": 0,
           "values": {"entranceID": 2}
         },
-        {"name": "enemySpawn", "id": 3, "_eid": "38673880", "x": 240, "y": 64, "originX": 0, "originY": 0},
+        {
+          "name": "enemySpawn",
+          "id": 3,
+          "_eid": "38673880",
+          "x": 240,
+          "y": 64,
+          "originX": 0,
+          "originY": 0,
+          "values": {"enemyType": 0}
+        },
         {"name": "ammoSpawn", "id": 4, "_eid": "38674929", "x": 48, "y": 48, "originX": 0, "originY": 0},
         {"name": "ammoSpawn", "id": 5, "_eid": "38674929", "x": 48, "y": 128, "originX": 0, "originY": 0},
-        {"name": "enemySpawn", "id": 6, "_eid": "38673880", "x": 288, "y": 192, "originX": 0, "originY": 0},
-        {"name": "enemyToughSpawn", "id": 8, "_eid": "88445138", "x": 256, "y": 320, "originX": 0, "originY": 0},
-        {"name": "enemySpawn", "id": 10, "_eid": "38673880", "x": 128, "y": 368, "originX": 0, "originY": 0},
+        {
+          "name": "enemySpawn",
+          "id": 6,
+          "_eid": "38673880",
+          "x": 288,
+          "y": 192,
+          "originX": 0,
+          "originY": 0,
+          "values": {"enemyType": 0}
+        },
+        {
+          "name": "enemySpawn",
+          "id": 10,
+          "_eid": "38673880",
+          "x": 128,
+          "y": 368,
+          "originX": 0,
+          "originY": 0,
+          "values": {"enemyType": 0}
+        },
         {"name": "ammoSpawn", "id": 11, "_eid": "38674929", "x": 304, "y": 64, "originX": 0, "originY": 0},
         {"name": "ammoSpawn", "id": 12, "_eid": "38674929", "x": 80, "y": 352, "originX": 0, "originY": 0},
         {"name": "ammoSpawn", "id": 13, "_eid": "38674929", "x": 272, "y": 384, "originX": 0, "originY": 0},
@@ -114,6 +140,16 @@
           "originX": 0,
           "originY": 0,
           "values": {"entranceID": 0}
+        },
+        {
+          "name": "enemySpawn",
+          "id": 23,
+          "_eid": "38673880",
+          "x": 256,
+          "y": 320,
+          "originX": 0,
+          "originY": 0,
+          "values": {"enemyType": 2}
         }
       ]
     },
