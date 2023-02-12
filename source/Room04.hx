@@ -1,6 +1,5 @@
 package;
 
-import haxe.io.Float32Array;
 import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
@@ -20,7 +19,7 @@ import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
 
-class PlayState extends FlxState
+class Room04 extends FlxState
 {
 	//Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
@@ -40,7 +39,7 @@ class PlayState extends FlxState
 	var enemyHealthBars:FlxTypedGroup<FlxBar>;
 	var enemyHealth:FlxBar;
 
-	var roomID:Int = 0;	
+	var roomID:Int = 4;	
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -71,7 +70,7 @@ class PlayState extends FlxState
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
 
 		//Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map00__json);
+		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map04__json);
 
 		//Show the hitboxes of game objects
 		//FlxG.debugger.drawDebug = true;
