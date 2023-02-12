@@ -58,6 +58,7 @@ class PlayState extends FlxState
 
 	var timerStart:Bool = false;
 	var timerStart2:Bool = false;
+	var maxTimerCounter:Float = 0.25;
 	var moving:Bool = false;
 	var attackRan:Int;
 
@@ -222,7 +223,6 @@ class PlayState extends FlxState
 		if(bullet.y < 0 || bullet.y > FlxG.stage.height || bullet.x < 0 || bullet.x > FlxG.stage.width){
 			bullet.kill();
 		}
-
 	}
 
 	public function killEnemies(bullet:FlxObject, e:FlxSprite){
