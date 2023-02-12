@@ -17,6 +17,8 @@ import flixel.math.FlxRandom;
 import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
+import flixel.tile.FlxTilemap;
+import flixel.util.FlxTimer;
 
 class PlayState extends FlxState
 {
@@ -24,6 +26,7 @@ class PlayState extends FlxState
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var enemy:FlxSprite;
+	var enemy2:FlxSprite;
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -42,14 +45,19 @@ class PlayState extends FlxState
 	var spawnEnemyY:Array<Float> = [];
 	var spawnAmmoX:Array<Float> = [];
 	var spawnAmmoY:Array<Float> = [];
-	var uiCamera:FlxCamera;
+  var uiCamera:FlxCamera;
 	var hud:HUD;
 	var levelText:FlxText;
+
 	override public function create()
-	{
-		//Change the mouse cursor to a crosshair
+	{		
+    //Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
 
+	  var timerStart:Bool = false;
+	  var maxTimerCounter:Float = 0.25;
+    
+		//Load the map data from the Ogmo3 file with the current level data
 		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
 
 		//Load in the tilemap from the tilemap image
@@ -86,6 +94,30 @@ class PlayState extends FlxState
 		}
 		add(bullets);
 
+		//Create 10 enemies off screen
+		enemies = new FlxTypedGroup(10);
+		for(i in 0...10){
+			enemy = new FlxSprite(-200,-200);
+			enemy.makeGraphic(10,10, FlxColor.RED);
+			enemy.exists = false;
+			enemies.add(enemy);
+			enemy2 = new FlxSprite(-200,-200);
+			enemy2.makeGraphic(40,40, FlxColor.GREEN);
+			enemy2.exists = false;
+			enemies.add(enemy2);
+		}
+		add(enemies);
+		
+		//Create 10 ammo boxes off screen
+		ammoBoxes = new FlxTypedGroup(10);
+		for(i in 0...10){
+			ammoBox = new FlxSprite(-200,-200);
+			ammoBox.makeGraphic(10,10, FlxColor.BLUE);
+			ammoBox.exists = false;
+			ammoBoxes.add(ammoBox);
+		}
+		add(ammoBoxes);
+
 		//Entity Placement
 		map.loadEntities(placeEntities, "entities");
 		spawnEnemies();
@@ -102,7 +134,7 @@ class PlayState extends FlxState
 	var angle:Float;
 	var xDist:Float;
 	var yDist:Float;
-
+  
 	override public function update(elapsed:Float)
 	{	
 		//Calculate the angle of the mouse relative to the player
@@ -135,7 +167,9 @@ class PlayState extends FlxState
 		}
 		
 		//Check if the bullets are out of bounds or touching an enemy
+
 		FlxG.overlap(bullets, enemies, killEnemies); 
+
 		//Check if player is touching an ammo box
 		FlxG.overlap(ammoBoxes, player, addAmmo);
 		//Check if player is touching an enemy
@@ -145,7 +179,7 @@ class PlayState extends FlxState
 
 		//Update the ammo display text
 		hud.updateHUD(ammoNum);
-
+    
 		super.update(elapsed);
 	}
 
@@ -154,7 +188,6 @@ class PlayState extends FlxState
 		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width){
 			bullet.kill();
 		}
-
 	}
 
 	public function killEnemies(bullet:FlxObject, e:FlxSprite){
@@ -188,6 +221,29 @@ class PlayState extends FlxState
 		//If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
 		ammoNum+=5;
+	}
+	
+	//controls the basic movement of the enemy towards the player
+	public function enemyMovement(e:FlxSprite, p:FlxSprite, speed:Float){
+			if(e.x != p.x && e.y != p.y && timerStart == false){
+				timerStart = false;
+				enemyDistX = e.x - p.x;
+				enemyDistY = e.y - p.y;
+				enemyAngle = Std.int(Math.atan(enemyDistX/enemyDistY) * 57.2957795);
+				e.angle = angle;
+				var enemyDist = Math.sqrt((enemyDistX*enemyDistX) + (enemyDistY*enemyDistY));
+				e.velocity.y = (enemyDistY / enemyDist) * -speed;
+				e.velocity.x = (enemyDistX / enemyDist) * -speed;
+			}
+	}
+	
+	//timers used so that ais only change direction every 1/4th of a second
+	function timerFunction(Timer:FlxTimer) : Void{
+			timerStart = true;
+			Timer.start(0.25, timerStop);
+	}
+	function timerStop(Timer:FlxTimer) : Void{
+		timerStart = false;
 	}
 
 	public function destroyBullets(b:FlxSprite, w:FlxTilemap){
@@ -260,11 +316,11 @@ class PlayState extends FlxState
 				}
 			case "door":
 				//Spawn a door that will have the destination ID and entrance ID
-				//var doorTemp = new Door(entity.values.stateDestID, entity.values.destEntrID);
+				var doorTemp = new Door(entity.values.stateDestID, entity.values.destEntrID);
 				//Set its position
-				//doorTemp.setPosition(entity.x+4, entity.y+4);
+				doorTemp.setPosition(entity.x+4, entity.y+4);
 				//Add it to the door group
-				//doorGroup.add(doorTemp);
+				doorGroup.add(doorTemp);
 			case "enemySpawn":
 				//Push the x and y coords of each enemy spawn location to their arrays
 				spawnEnemyX.push(entity.x);

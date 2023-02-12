@@ -47,10 +47,10 @@ class Player extends FlxSprite{
 
     function updateMovement(){ 
         //Set variables that store which direction the player wants to go based on keys pressed
-        var up:Bool = FlxG.keys.anyPressed([W]);
-        var down:Bool = FlxG.keys.anyPressed([S]);
-        var left:Bool = FlxG.keys.anyPressed([A]);
-        var right:Bool = FlxG.keys.anyPressed([D]);
+        var up:Bool = FlxG.keys.anyPressed([W, UP]);
+        var down:Bool = FlxG.keys.anyPressed([S, DOWN]);
+        var left:Bool = FlxG.keys.anyPressed([A, LEFT]);
+        var right:Bool = FlxG.keys.anyPressed([D, RIGHT]);
 
         //Calculate the angle and set a default direction
         var mouseAngle = FlxAngle.angleBetweenMouse(this, true);
