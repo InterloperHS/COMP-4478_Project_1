@@ -454,7 +454,8 @@ if (FlxG.keys.enabled){
         }
          if (FlxG.keys.pressed.ESCAPE)
         {
-            Sys.exit(0);
+            // TODO: add pause menu
+            FlxG.switchState(new MenuState());
         }
 
 }
