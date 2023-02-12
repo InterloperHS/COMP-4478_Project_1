@@ -198,6 +198,7 @@ class PlayState extends FlxState
 
 		//Check if player is touching an enemy
 		FlxG.overlap(player, enemies, hurtPlayer);
+		FlxG.overlap(player, bigEnemies, hurtPlayer);
 
 		//Update the ammo display text
 		hud.updateHUD(ammoNum);
@@ -402,7 +403,7 @@ class PlayState extends FlxState
 					enemyBullet.x = rangeX[i];
 					enemyBullet.y = rangeY[i];
 					enemyBullet.angle = enemyProjectileAngle;
-					var speed = 300;
+					var speed = 200;
 					var distance = Math.sqrt((enemyProjectileDistX * enemyProjectileDistX) + (enemyProjectileDistY * enemyProjectileDistY));
 					enemyBullet.velocity.y = (enemyProjectileDistY / distance) * speed;
 					enemyBullet.velocity.x = (enemyProjectileDistX / distance) * speed;
