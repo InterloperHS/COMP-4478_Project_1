@@ -67,6 +67,7 @@ class PlayState extends FlxState
 	var levelText:FlxText;
 	override public function create()
 	{
+
 		//Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
 
@@ -132,6 +133,9 @@ class PlayState extends FlxState
 		spawnAmmo();
 
 		//Make the camera follow the player and overlay the HUD
+		FlxG.camera.setSize(320, 240);
+		FlxG.game.scaleX = 2;
+		FlxG.game.scaleY = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
 		hud = new HUD(player);
 		add(hud);

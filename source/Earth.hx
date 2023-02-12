@@ -389,7 +389,7 @@ if(mySprite.x < FlxG.worldBounds.left)
 if (FlxG.keys.enabled){
 
     //move by the key board arrows
-        if (FlxG.keys.pressed.LEFT)
+        if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.A)
         {
    
            // change boy direction to left
@@ -404,7 +404,7 @@ if (FlxG.keys.enabled){
    
         }
 
-        if (FlxG.keys.pressed.RIGHT)
+        if (FlxG.keys.pressed.RIGHT || FlxG.keys.pressed.D)
         {
             // change boy direction to right
            boy.scale.x= -0.2;
@@ -415,12 +415,12 @@ if (FlxG.keys.enabled){
         
           
         }
-        if (FlxG.keys.pressed.UP)
+        if (FlxG.keys.pressed.UP || FlxG.keys.pressed.W)
         {
         
             //boy.y -= 2;
         }
-        if (FlxG.keys.pressed.DOWN)
+        if (FlxG.keys.pressed.DOWN || FlxG.keys.pressed.S)
         {
           
            // boy.y += 2;
