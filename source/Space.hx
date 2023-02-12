@@ -66,10 +66,10 @@ FlxG.cameras.add(camera);
         
         // Create tutorial array
         tutorialArray = [
-            "What a wonderful day for a stroll in interstellar space",
-            "Oh, my God, there is a strange space object rapidly approaching our friends' spacecraft",
-            "It completely destroyed their spacecraft",
-            "Look, there's a disc moving from the blast remnants, let's see what is it.",
+            "Alien ship: Everything seems to be stable while travelling in space.",
+            "Oh my God, there is a strange space object rapidly approaching our friends' spacecraft!",
+            "It completely destroyed their spacecraft!",
+            "Look, there's a disc moving from the remains, let's see what is it.",
             "It seems that there are aliens on a planet called 'Earth'",
             "They look dangerous, they destroyed our friends' spaceship and we must avenge them.",
             "We have their planet's address, let's go"           

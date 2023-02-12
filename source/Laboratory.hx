@@ -44,9 +44,9 @@ class Laboratory extends FlxState {
 
 		// Create tutorial array
 		tutorialArray = [
-			"Hello Professor Mohammad, I heard we lost connection with the space prob Voyager 1, is that true?",
-			"Hello Professor Sam, unfortunately that is true.\nIt has traveled nearly 22 billion km since its launch in 1977.",
-			"I hope that connection returns soon, or the prob reachs an advanced space civilization and give them information about us.",
+			"Hello Professor Mohammad, I heard we've lost contact with the Space Probe Voyager 1, is that true?",
+			"Greetings Professor Sam, unfortunately that is true.\nIt has traveled nearly 22 billion km since its launch in 1977.",
+			"I hope they connect with us soon or else the probe will reach an advanced space civilization.",
 			"We have put many phonetic codes in several languages, as we have put the Earth's position in relation to our galaxy.",
 
 		];

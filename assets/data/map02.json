@@ -15,7 +15,6 @@
       "gridCellsX": 40,
       "gridCellsY": 30,
       "entities": [
-        {"name": "ammoSpawn", "id": 4, "_eid": "38674929", "x": 592, "y": 256, "originX": 0, "originY": 0},
         {"name": "ammoSpawn", "id": 5, "_eid": "38674929", "x": 256, "y": 256, "originX": 0, "originY": 0},
         {"name": "ammoSpawn", "id": 6, "_eid": "38674929", "x": 416, "y": 224, "originX": 0, "originY": 0},
         {
@@ -53,7 +52,7 @@
           "id": 12,
           "_eid": "38673880",
           "x": 304,
-          "y": 112,
+          "y": 128,
           "originX": 0,
           "originY": 0,
           "values": {"enemyType": 1}
@@ -63,7 +62,7 @@
           "id": 13,
           "_eid": "38673880",
           "x": 400,
-          "y": 112,
+          "y": 128,
           "originX": 0,
           "originY": 0,
           "values": {"enemyType": 1}
