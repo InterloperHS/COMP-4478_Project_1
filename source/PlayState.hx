@@ -67,9 +67,8 @@ class PlayState extends FlxState
 	var levelText:FlxText;
 	override public function create()
 	{
-
 		//Change the mouse cursor to a crosshair
-		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
+		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
 
 		//Load the map data from the Ogmo3 file with the current level data
 		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map00__json);
@@ -481,7 +480,7 @@ class PlayState extends FlxState
 		}
 
 		//Setting things to not be able to collide in any direction
-		var anyTiles:Array<Int> = [116,117,118,119,120, 185,186,187, 208,209,210, 231,232,233, 369,370,371, 13,14,15,16,17,18, 37,38,39,40,41,42, 61,62,63,64,65,66];
+		var anyTiles:Array<Int> = [116,117,118,119,120, 185,186,187, 208,209,210, 138,139,140, 231,232,233, 369,370,371, 13,14,15,16,17,18, 36,37,38,39,40,41, 58,59,60,61,62,63,64,65,66, 82,83,84,85,86,87, 105,106,107,108,109,110, 128,129,130,131,132,133];
 		for(i in anyTiles){
 			theTilemap.setTileProperties(i, ANY);
 		}
