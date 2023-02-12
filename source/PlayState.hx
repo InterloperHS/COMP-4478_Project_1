@@ -24,7 +24,7 @@ class PlayState extends FlxState
 {
 	//Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
-	var bullets2:FlxTypedGroup<EnemyBullet>;
+	var bullets2:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var bigEnemies:FlxTypedGroup<FlxSprite>;
 	var rangedEnemies:FlxTypedGroup<FlxSprite>;
@@ -34,6 +34,9 @@ class PlayState extends FlxState
 	var spawnEnemyX:Array<Float> = [];
 	var spawnEnemyY:Array<Float> = [];
 	var spawnEnemyType:Array<Int> = [];
+	var rangeX:Array<Float> = [];
+	var rangeY:Array<Float> = [];
+	var rangeCanFire:Array<Bool> = [];
 	var enemyHealthBars:FlxTypedGroup<FlxBar>;
 	var enemyHealth:FlxBar;
 
@@ -109,17 +112,17 @@ class PlayState extends FlxState
 		add(doorGroup);
 
 		//Generates the enemy's bullets
-		bullets2 = new FlxTypedGroup();
+		bullets2 = new FlxTypedGroup(10);
+		for(i in 0...numBullets){
+			var enemyBul = new FlxSprite(-100,-100);
+			enemyBul.makeGraphic(15, 10, FlxColor.ORANGE);
+			enemyBul.exists = false;
+			bullets2.add(enemyBul);
+		}
 		add(bullets2);
 
 		//Create 10 ammo boxes off screen
 		ammoBoxes = new FlxTypedGroup(10);
-		for(i in 0...10){
-			ammoBox = new FlxSprite(-200,-200);
-			ammoBox.makeGraphic(10,10, FlxColor.BLUE);
-			ammoBox.exists = false;
-			ammoBoxes.add(ammoBox);
-		}
 		add(ammoBoxes);
 
 		//Entity Placement
@@ -199,33 +202,8 @@ class PlayState extends FlxState
 		//Update the ammo display text
 		hud.updateHUD(ammoNum);
 		
-		//Start timer for movement of enemy
-		if(timerStart == false){
-			//enemy = enemies.getRandom();
-			//enemy2 = bigEnemies.getRandom();
-			timerFunction(new FlxTimer());
-		}
-
-
+		//Start the timer for shooting
 		if(timerStart2 == false){
-			// enemyProjectileDistX = player.x - rangedEnemy.x;
-			// enemyProjectileDistY = player.y - rangedEnemy.y;
-
-			// enemyProjectileAngle= Std.int(Math.atan(enemyProjectileDistY/enemyProjectileDistX) * 57.2957795);
-			// rangedEnemy.angle = enemyProjectileAngle;
-
-			var enemyBullet:EnemyBullet = bullets2.recycle();
-			enemyBullet.enemyShoot();
-			// enemyBullet.x = rangedEnemy.x;
-			// enemyBullet.y = rangedEnemy.y;
-			// enemyBullet.angle = enemyProjectileAngle;
-
-			// var speed = 300;
-			// var distance = Math.sqrt((enemyProjectileDistX * enemyProjectileDistX) + (enemyProjectileDistY * enemyProjectileDistY));
-
-			// enemyBullet.velocity.y = (enemyProjectileDistY / distance) * speed;
-			// enemyBullet.velocity.x = (enemyProjectileDistX / distance) * speed;
-
 			shootTimer(new FlxTimer());
 		}
 
@@ -233,7 +211,7 @@ class PlayState extends FlxState
 		FlxG.overlap(ammoBoxes, player, addAmmo);
 
 		//Check if player is hit by enemy bullet
-		FlxG.overlap(bullets2, player, hurtPlayerRanged);
+		FlxG.overlap(player, bullets2, hurtPlayerRanged);
 
 		super.update(elapsed);
 	}
@@ -255,6 +233,18 @@ class PlayState extends FlxState
 		if(e.health<=0){
 			e.kill();
 			Reg.ENEMIES[roomID]--;
+		}
+
+		//Check if position matches any of the ranged spots
+		if(rangeCanFire.length > 0){
+			for(i in 0...(rangeCanFire.length)){
+				if((rangeX[i]-0.5) <= e.x && e.x <= (rangeX[i]+0.5)){
+					if((rangeY[i]-0.5) <= e.y && e.y <= (rangeY[i]+0.5)){
+						//Make sure that ranged enemy cannot shoot again
+						rangeCanFire[i] = false;
+					}
+				}
+			}
 		}
 	}
 
@@ -340,13 +330,9 @@ class PlayState extends FlxState
 						enemy.exists = true;
 						enemy.health = 20;
 						rangedEnemies.add(enemy);
-						//Make bullets for enemy
-						for(i in 0...3){
-							var enemyBul = new EnemyBullet(-100,-100,enemy,player);
-							enemyBul.makeGraphic(15, 10, FlxColor.ORANGE);
-							enemyBul.exists = false;
-							bullets2.add(enemyBul);
-						}
+						rangeX.push(spawnEnemyX[i]);
+						rangeY.push(spawnEnemyY[i]);
+						rangeCanFire.push(true);
 					//Large Enemies
 					case 2:
 						enemy = new Enemy(-200,-200, player, 10);
@@ -396,34 +382,33 @@ class PlayState extends FlxState
 		b.kill();
 	}
 
-	//calculates where the enemy should move
-	// public function enemyMovement(e:FlxSprite, p:FlxSprite, speed:Float){
-	// 	if(e.x != p.x && e.y != p.y && timerStart == false){
-	// 		timerStart = false;
-	// 		enemyDistX = e.x - p.x;
-	// 		enemyDistY = e.y - p.y;
-
-	// 		var enemyDist = Math.sqrt((enemyDistX*enemyDistX) + (enemyDistY*enemyDistY));
-	// 		e.velocity.y = (enemyDistY / enemyDist) * -speed;
-	// 		e.velocity.x = (enemyDistX / enemyDist) * -speed;
-	// 	}
-	// }
-
-	//timers for the basic movement for enemies
-	function timerFunction(Timer:FlxTimer) : Void{
-		timerStart = true;
-		Timer.start(0.25, timerStop);
-	}
-	function timerStop(Timer:FlxTimer) : Void{
-		timerStart = false;
-	}
-
 	//timers for the enemies to shoot
 	function shootTimer(Timer:FlxTimer) : Void{
 		timerStart2 = true;
 		Timer.start(2, shootTimerStop);
 	}
 	function shootTimerStop(Timer:FlxTimer) : Void{
+		//Check if there are any range enemies that can fire
+		if(rangeX.length > 0){
+			for(i in 0...rangeX.length){
+				if(rangeCanFire[i]){
+					//Create a bullet that will shoot towards the player
+					enemyProjectileDistX = player.x - rangeX[i];
+					enemyProjectileDistY = player.y - rangeY[i];
+
+					var enemyBullet:FlxSprite = bullets2.recycle();
+					enemyProjectileAngle= Std.int(Math.atan(enemyProjectileDistY/enemyProjectileDistX) * 57.2957795);
+					
+					enemyBullet.x = rangeX[i];
+					enemyBullet.y = rangeY[i];
+					enemyBullet.angle = enemyProjectileAngle;
+					var speed = 300;
+					var distance = Math.sqrt((enemyProjectileDistX * enemyProjectileDistX) + (enemyProjectileDistY * enemyProjectileDistY));
+					enemyBullet.velocity.y = (enemyProjectileDistY / distance) * speed;
+					enemyBullet.velocity.x = (enemyProjectileDistX / distance) * speed;
+				}
+			}
+		}
 		timerStart2 = false;
 	}
 
