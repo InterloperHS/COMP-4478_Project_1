@@ -68,6 +68,16 @@
           "originX": 0,
           "originY": 0,
           "values": {"entranceID": 1}
+        },
+        {
+          "name": "enemySpawn",
+          "id": 11,
+          "_eid": "38673880",
+          "x": 112,
+          "y": 208,
+          "originX": 0,
+          "originY": 0,
+          "values": {"enemyType": 1}
         }
       ]
     },
