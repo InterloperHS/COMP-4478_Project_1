@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.FlxG;
@@ -10,18 +11,18 @@ class MenuState extends FlxState
 {
     var playButton:FlxButton;
     var optionsButton:FlxButton;
-    override public function create() {
-        super.create();
-
+    override public function create() {        
         playButton = new FlxButton(0, 0, "Play", clickPlay);
-        playButton.x = (FlxG.width / 2) - (playButton.width/2);
-        playButton.y = (FlxG.height/2) - (playButton.height/2) - 10;
+        playButton.screenCenter(FlxAxes.X);
+        playButton.y = (FlxG.height/2) - (playButton.height/2) - 16;
         add(playButton);
-       
+        
         optionsButton = new FlxButton(0, 0, "Options", clickOptions);
-        optionsButton.x = (FlxG.width / 2) - (optionsButton.width/2);
-        optionsButton.y = (FlxG.height/2) - (optionsButton.height/2) + 10;
+        optionsButton.screenCenter(FlxAxes.X);
+        optionsButton.y = (FlxG.height/2) - (optionsButton.height/2) + 16;
         add(optionsButton);
+
+        super.create();
     }
     function clickPlay() {
         FlxG.switchState(new PlayState());
