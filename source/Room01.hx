@@ -57,6 +57,7 @@ class Room01 extends FlxState
 
 	var timerStart:Bool = false;
 	var timerStart2:Bool = false;
+	var maxTimerCounter:Float = 0.25;
 	var moving:Bool = false;
 	var attackRan:Int;
 
@@ -132,7 +133,7 @@ class Room01 extends FlxState
 		//Make the camera follow the player and overlay the HUD
 		FlxG.camera.setSize(320, 240);
 		FlxG.game.scaleX = 2;
-		FlxG.game.scaleY = 2;	
+		FlxG.game.scaleY = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
 		hud = new HUD(player);
 		add(hud);
@@ -221,10 +222,9 @@ class Room01 extends FlxState
 
 	public function outOfBounds(bullet:FlxObject){
 		//If the bullet is out of bounds, kill it
-		if(bullet.y < 0 || bullet.y > FlxG.stage.height || bullet.x < 0 || bullet.x > FlxG.stage.width){
+		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width){
 			bullet.kill();
 		}
-
 	}
 
 	public function killEnemies(bullet:FlxObject, e:FlxSprite){
@@ -249,6 +249,25 @@ class Room01 extends FlxState
 				}
 			}
 		}
+
+		//Check the win condition after killing this enemy
+		checkWin();
+	}
+
+	//Function for checking the win condition. "Killing every enemy"
+	public function checkWin(){
+		//Check the win condition after killing the enemy
+		if(Reg.ENEMIES[roomID] == 0){
+			var winCon:Bool = true;
+			//Go through each enemy count
+			for(i in 0...(Reg.ENEMIES.length)){
+				//If any are not 0, the win condition is false
+				if (Reg.ENEMIES[i] != 0) winCon = false;
+			}
+			if(winCon){
+				FlxG.switchState(new WinState());
+			}
+		}
 	}
 
 	public function hurtPlayer(p:Player, e:FlxObject){
@@ -262,6 +281,7 @@ class Room01 extends FlxState
 			Reg.PLAYERHEALTH = p.health;
 			if(p.health<=0){
 				p.kill();
+				FlxG.switchState(new GameoverState());
 			}
 		}
 		//Flicker the Player sprite to give player "immunity" for a frew seconds
@@ -313,7 +333,6 @@ class Room01 extends FlxState
 		if(Reg.ENEMIES[roomID] != 0){
 			//Check to see if we have less enemies killed in this room already
 			var spawnAmount:Int = (Reg.ENEMIES[roomID] < spawnEnemyX.length) ? Reg.ENEMIES[roomID] : spawnEnemyX.length;
-			Reg.ENEMIES[roomID] = spawnAmount;
 
 			//Create as many enemies and health bars as there are spawning locations
 			for(i in 0...(spawnAmount)){

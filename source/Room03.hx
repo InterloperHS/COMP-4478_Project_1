@@ -222,7 +222,7 @@ class Room03 extends FlxState
 
 	public function outOfBounds(bullet:FlxObject){
 		//If the bullet is out of bounds, kill it
-		if(bullet.y < 0 || bullet.y > FlxG.stage.height || bullet.x < 0 || bullet.x > FlxG.stage.width){
+		if(bullet.y < 0 || bullet.y > FlxG.height || bullet.x < 0 || bullet.x > FlxG.width){
 			bullet.kill();
 		}
 	}
@@ -249,6 +249,25 @@ class Room03 extends FlxState
 				}
 			}
 		}
+
+		//Check the win condition after killing this enemy
+		checkWin();
+	}
+
+	//Function for checking the win condition. "Killing every enemy"
+	public function checkWin(){
+		//Check the win condition after killing the enemy
+		if(Reg.ENEMIES[roomID] == 0){
+			var winCon:Bool = true;
+			//Go through each enemy count
+			for(i in 0...(Reg.ENEMIES.length)){
+				//If any are not 0, the win condition is false
+				if (Reg.ENEMIES[i] != 0) winCon = false;
+			}
+			if(winCon){
+				FlxG.switchState(new WinState());
+			}
+		}
 	}
 
 	public function hurtPlayer(p:Player, e:FlxObject){
@@ -262,6 +281,7 @@ class Room03 extends FlxState
 			Reg.PLAYERHEALTH = p.health;
 			if(p.health<=0){
 				p.kill();
+				FlxG.switchState(new GameoverState());
 			}
 		}
 		//Flicker the Player sprite to give player "immunity" for a frew seconds
@@ -313,7 +333,6 @@ class Room03 extends FlxState
 		if(Reg.ENEMIES[roomID] != 0){
 			//Check to see if we have less enemies killed in this room already
 			var spawnAmount:Int = (Reg.ENEMIES[roomID] < spawnEnemyX.length) ? Reg.ENEMIES[roomID] : spawnEnemyX.length;
-			Reg.ENEMIES[roomID] = spawnAmount;
 
 			//Create as many enemies and health bars as there are spawning locations
 			for(i in 0...(spawnAmount)){

@@ -44,6 +44,9 @@ class MenuState extends FlxState
         optionsButton.x = (FlxG.width / 2) - (optionsButton.width/2);
         optionsButton.y = (FlxG.height/2) - (optionsButton.height/2) + 160;
         add(optionsButton);
+
+        //Reset registry if needed
+        Reg.resetReg();
     }
     function clickPlayStory() {
         FlxG.switchState(new Laboratory());
