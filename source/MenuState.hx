@@ -24,7 +24,7 @@ class MenuState extends FlxState
         add(optionsButton);
     }
     function clickPlay() {
-        FlxG.switchState(new PlayState());
+        FlxG.switchState(new Laboratory());
     }
     function clickOptions() {
         FlxG.switchState(new OptionsState());
