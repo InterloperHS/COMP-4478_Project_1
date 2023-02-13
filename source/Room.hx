@@ -86,12 +86,13 @@ class Room extends FlxState {
 	}
 
 	override public function create() {
+		
 		// Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
-
+		
 		// Show the hitboxes of game objects
 		// FlxG.debugger.drawDebug = true;
-
+		
 		// Load in the tilemap from the tilemap image
 		walls = map.loadTilemap(AssetPaths.dungeon_tiles__png, "walls");
 		walls.follow();
@@ -100,20 +101,14 @@ class Room extends FlxState {
 		add(walls);
 		// Generate a new random key
 		random = new FlxRandom();
-
+		
 		// Create a new timer
 		timer = new FlxTimer();
-
+		
 		// Create the player and add them to the screen
 		player = new Player(FlxG.width / 2, FlxG.height / 2);
 		player.health = Reg.PLAYERHEALTH;
 		add(player);
-
-		// Make the camera follow the player and overlay the HUD
-		FlxG.camera.zoom = 2;
-		FlxG.camera.follow(player, TOPDOWN, 1);
-		hud = new HUD(player);
-		add(hud);
 
 		// Create the bullets group and set ammo
 		ammoNum = Reg.AMMO;
@@ -153,6 +148,10 @@ class Room extends FlxState {
 		spawnEnemies();
 		spawnAmmo();
 
+		// Zoom camera and follow player
+		FlxG.camera.zoom = 2;
+		FlxG.camera.follow(player, TOPDOWN, 1);
+		
 		// Help button to show controls
 		helpButton = new FlxButton(0, 0, null, function() {
 			openSubState(new HelpState(0x6703378B));
@@ -162,7 +161,7 @@ class Room extends FlxState {
 		helpButton.updateHitbox();
 		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16 / FlxG.camera.zoom, FlxG.camera.viewTop + 16 / FlxG.camera.zoom);
 		add(helpButton);
-
+		
 		// Pause button to pause the game
 		pauseButton = new FlxButton(0, 0, null, function() {
 			openSubState(new PauseState(0x6703378B));
@@ -172,6 +171,11 @@ class Room extends FlxState {
 		pauseButton.updateHitbox();
 		pauseButton.setPosition(helpButton.x, helpButton.y + helpButton.height);
 		add(pauseButton);
+
+		// overlay the HUD
+		hud = new HUD(player);
+		add(hud);
+
 		super.create();
 	}
 
