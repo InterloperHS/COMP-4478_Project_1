@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUISubState;
@@ -10,6 +11,7 @@ class PauseState extends FlxUISubState {
 	}
 
 	override public function create() {
+		FlxG.camera.zoom = 1;
 		_xml_id = "pause_ui";
 		super.create();
 	}
@@ -21,7 +23,10 @@ class PauseState extends FlxUISubState {
 					switch (Std.string(params[0])) {
 						case "stop": FlxG.switchState(new MenuState());
                         case "options": openSubState(new OptionsState(0x6703378B));
-						case "back": close();
+						case "back": {
+							FlxG.camera.zoom = 2;
+							close();
+						}
 					}
 			}
 		}

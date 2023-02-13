@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUISubState;
@@ -10,6 +11,7 @@ class HelpState extends FlxUISubState {
 	}
 
 	override public function create() {
+		FlxG.camera.zoom = 1;
 		_xml_id = "help_ui";
 		super.create();
 	}
@@ -19,7 +21,10 @@ class HelpState extends FlxUISubState {
 			switch (event) {
 				case "click_button":
 					switch (Std.string(params[0])) {
-						case "back": close();
+						case "back": {
+								FlxG.camera.zoom = 2;
+								close();
+							}
 					}
 			}
 		}

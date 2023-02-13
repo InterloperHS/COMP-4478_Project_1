@@ -137,11 +137,6 @@ class PlayState extends FlxState
 		spawnEnemies();
 		spawnAmmo();
 
-		//Make the camera follow the player and overlay the HUD
-		FlxG.camera.setSize(320, 240);
-		FlxG.game.scaleX = 2;
-		FlxG.game.scaleY = 2;
-		FlxG.camera.follow(player, TOPDOWN, 1);
 		hud = new HUD(player);
 		add(hud);
 
@@ -152,7 +147,7 @@ class PlayState extends FlxState
 		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
 		helpButton.setGraphicSize(32,32);
 		helpButton.updateHitbox();
-		helpButton.setPosition(FlxG.width - helpButton.width - 16 , 16);
+		helpButton.setPosition(FlxG.width - helpButton.width - 16, 16);
 		add(helpButton);
 
 		// Pause button to pause the game
@@ -162,8 +157,20 @@ class PlayState extends FlxState
 		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
 		pauseButton.setGraphicSize(32,32);
 		pauseButton.updateHitbox();
-		pauseButton.setPosition(FlxG.width - pauseButton.width - 16 , 16+helpButton.height);
+		pauseButton.setPosition(helpButton.x, helpButton.y+helpButton.height);
 		add(pauseButton);
+
+		// Make the camera follow the player and overlay the HUD
+		FlxG.camera.zoom = 2;
+		FlxG.camera.follow(player, TOPDOWN, 1);
+
+		var uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
+		FlxG.cameras.add(uiCamera, false);
+
+		hud.cameras = [uiCamera];
+		helpButton.cameras = [uiCamera];
+		pauseButton.cameras = [uiCamera];
 		super.create();
 	}
 

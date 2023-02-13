@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -72,6 +73,7 @@ class OptionsState extends FlxSubState {
 		// update the speed bar to show the current speed level
 		updateSpeed();
 
+		FlxG.camera.zoom = 1;
 		super.create();
 	}
 
@@ -81,6 +83,7 @@ class OptionsState extends FlxSubState {
 	function clickBack() {
 		FlxG.save.data.speed = speed;
 		FlxG.save.flush();
+		FlxG.camera.zoom = 2;
 		close();
 	}
 
