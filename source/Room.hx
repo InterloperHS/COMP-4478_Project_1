@@ -64,6 +64,18 @@ class Room extends FlxState {
 	var hud:HUD;
 	var levelText:FlxText;
 
+	var angle:Float;
+	var xDist:Float;
+	var yDist:Float;
+	var enemyDistX:Float;
+	var enemyDistY:Float;
+	var enemyAngle:Int;
+	// calculates the enemies projectiles
+	var enemyProjectileDistX:Float;
+	var enemyProjectileDistY:Float;
+	var enemyProjectileAngle:Float;
+	var rangedX:Array<Float>;
+	var rangedY:Array<Float>;
 	override public function new(roomID:Int, mapPath:String) {
 		this.roomID = roomID;
 		// Load the map data from the Ogmo3 file with the current level data
@@ -169,19 +181,6 @@ class Room extends FlxState {
 
 		super.create();
 	}
-
-	var angle:Float;
-	var xDist:Float;
-	var yDist:Float;
-	var enemyDistX:Float;
-	var enemyDistY:Float;
-	var enemyAngle:Int;
-	// calculates the enemies projectiles
-	var enemyProjectileDistX:Float;
-	var enemyProjectileDistY:Float;
-	var enemyProjectileAngle:Float;
-	var rangedX:Array<Float>;
-	var rangedY:Array<Float>;
 
 	override public function update(elapsed:Float) {
 		// Calculate the angle of the mouse relative to the player
