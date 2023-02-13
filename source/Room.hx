@@ -1,5 +1,6 @@
 package;
 
+import flixel.ui.FlxButton;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -16,7 +17,7 @@ import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
 
-class Room04 extends FlxState {
+class Room extends FlxState {
 	// Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var bullets2:FlxTypedGroup<FlxSprite>;
@@ -35,7 +36,7 @@ class Room04 extends FlxState {
 	var enemyHealthBars:FlxTypedGroup<FlxBar>;
 	var enemyHealth:FlxBar;
 
-	var roomID:Int = 4;
+	var roomID:Int;
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -57,16 +58,21 @@ class Room04 extends FlxState {
 	var moving:Bool = false;
 	var attackRan:Int;
 
+	var helpButton:FlxButton;
+	var pauseButton:FlxButton;
 	var uiCamera:FlxCamera;
 	var hud:HUD;
 	var levelText:FlxText;
 
+	override public function new(roomID:Int, mapPath:String) {
+		this.roomID = roomID;
+		// Load the map data from the Ogmo3 file with the current level data
+		this.map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, mapPath);
+		super();
+	}
 	override public function create() {
 		// Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
-
-		// Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map04__json);
 
 		// Show the hitboxes of game objects
 		// FlxG.debugger.drawDebug = true;
@@ -131,6 +137,36 @@ class Room04 extends FlxState {
 		FlxG.camera.zoom = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
 		hud = new HUD(player);
+		// Help button to show controls
+		helpButton = new FlxButton(0, 0, null, function _() {
+			var helpState = new HelpState(0x6703378B);
+			helpState.closeCallback = function _() {
+				FlxG.camera.zoom = 2;
+			};
+			openSubState(helpState);
+		});
+		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
+		helpButton.setGraphicSize(Std.int(32/FlxG.camera.zoom), Std.int(32/FlxG.camera.zoom));
+		helpButton.updateHitbox();
+		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16/FlxG.camera.zoom, FlxG.camera.viewTop+16/FlxG.camera.zoom);
+		add(helpButton);
+
+		// Pause button to pause the game
+		pauseButton = new FlxButton(0, 0, null, function _() {
+			var pauseState = new PauseState(0x6703378B);
+			pauseState.closeCallback = function _() {
+				FlxG.camera.zoom = 2;
+			};
+			openSubState(pauseState);
+		});
+		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
+		pauseButton.setGraphicSize(Std.int(32/FlxG.camera.zoom), Std.int(32/FlxG.camera.zoom));
+		pauseButton.updateHitbox();
+		pauseButton.setPosition(helpButton.x, helpButton.y + helpButton.height);
+		add(pauseButton);
+		
+		// Make the camera follow the player and overlay the HUD
+		FlxG.camera.follow(player, TOPDOWN, 1);
 		add(hud);
 
 		super.create();
@@ -467,17 +503,17 @@ class Room04 extends FlxState {
 		// Determines which state to go to
 		switch (door.stateDestID) {
 			case 0:
-				FlxG.switchState(new PlayState());
+				FlxG.switchState(new Room(0, AssetPaths.map00__json));
 			case 1:
-				FlxG.switchState(new Room01());
+				FlxG.switchState(new Room(1, AssetPaths.map01__json));
 			case 2:
-				FlxG.switchState(new Room02());
+				FlxG.switchState(new Room(2, AssetPaths.map02__json));
 			case 3:
-				FlxG.switchState(new Room03());
+				FlxG.switchState(new Room(3, AssetPaths.map03__json));
 			case 4:
-				FlxG.switchState(new Room04());
+				FlxG.switchState(new Room(4, AssetPaths.map04__json));
 			case 5:
-				FlxG.switchState(new Room05());
+				FlxG.switchState(new Room(5, AssetPaths.map05__json));
 		}
 	}
 
