@@ -393,7 +393,7 @@ class Room extends FlxState {
 						bigEnemies.add(enemy);
 				}
 
-				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, 100, 10, enemy, "health", 0, enemy.health, false);
+				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(100 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0, enemy.health, false);
 				enemyHealth.exists = true;
 				enemyHealth.killOnEmpty = true;
 
