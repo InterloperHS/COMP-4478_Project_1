@@ -36,13 +36,12 @@ class PlayState extends FlxState
 	var spawnAmmoY:Array<Float> = [];
 	var timerStart:Bool = false;
 	var maxTimerCounter:Float = 0.25;
-	// Create game HUD
-	var hud:HUD = new HUD();
 	var helpButton:FlxButton;
 	var pauseButton:FlxButton;
 
 	override public function create()
 	{		
+
 		//Load the map data from the Ogmo3 file with the current level data
 		map = new FlxOgmo3Loader(AssetPaths.compproject1__ogmo, AssetPaths.map001__json);
 
@@ -64,7 +63,6 @@ class PlayState extends FlxState
 
 		//Create the bullets group and set ammo
 		ammoNum = 20;
-		hud.updateHUD(0, ammoNum);
 		var numBullets:Int = 10;
 		bullets = new FlxTypedGroup(numBullets);
 
@@ -105,7 +103,6 @@ class PlayState extends FlxState
 		//Entity Placement
 		map.loadEntities(placeEntities, "entities");
 
-		add(hud);
 		super.create();
 	}
 
@@ -136,7 +133,6 @@ class PlayState extends FlxState
 		if(FlxG.keys.justPressed.SPACE && ammoNum > 0){
 			//Create a new bullet at the player and point it the same angle of the player
 			ammoNum--;
-			hud.updateHUD(0, ammoNum);
 			var bullet:FlxSprite = bullets.recycle();
 			bullet.x = player.x;
 			bullet.y = player.y;
@@ -218,7 +214,6 @@ class PlayState extends FlxState
 		//If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
 		ammoNum+=5;
-		hud.updateHUD(0, ammoNum);
 	}
 	
 	//controls the basic movement of the enemy towards the player
