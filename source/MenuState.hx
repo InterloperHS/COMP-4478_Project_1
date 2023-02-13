@@ -6,6 +6,7 @@ import flixel.addons.ui.FlxUIState;
 
 class MenuState extends FlxUIState {
 	override public function create() {
+		FlxG.camera.zoom = 1;
 		_xml_id = "menu_ui";
 		// Reset registry if needed
 		Reg.resetReg();
