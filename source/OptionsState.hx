@@ -82,7 +82,6 @@ class OptionsState extends FlxSubState {
 	function clickBack() {
 		FlxG.save.data.speed = speed;
 		FlxG.save.flush();
-		FlxG.camera.zoom = 2;
 		close();
 	}
 

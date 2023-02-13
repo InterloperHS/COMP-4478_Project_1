@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxSubState;
+import flixel.ui.FlxButton;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -16,7 +18,7 @@ import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
 
-class Room04 extends FlxState {
+class Room extends FlxState {
 	// Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var bullets2:FlxTypedGroup<FlxSprite>;
@@ -35,7 +37,7 @@ class Room04 extends FlxState {
 	var enemyHealthBars:FlxTypedGroup<FlxBar>;
 	var enemyHealth:FlxBar;
 
-	var roomID:Int = 4;
+	var roomID:Int;
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -57,20 +59,40 @@ class Room04 extends FlxState {
 	var moving:Bool = false;
 	var attackRan:Int;
 
+	var helpButton:FlxButton;
+	var pauseButton:FlxButton;
 	var uiCamera:FlxCamera;
 	var hud:HUD;
 	var levelText:FlxText;
 
+	var angle:Float;
+	var xDist:Float;
+	var yDist:Float;
+	var enemyDistX:Float;
+	var enemyDistY:Float;
+	var enemyAngle:Int;
+	// calculates the enemies projectiles
+	var enemyProjectileDistX:Float;
+	var enemyProjectileDistY:Float;
+	var enemyProjectileAngle:Float;
+	var rangedX:Array<Float>;
+	var rangedY:Array<Float>;
+
+	override public function new(roomID:Int, mapPath:String) {
+		this.roomID = roomID;
+		// Load the map data from the Ogmo3 file with the current level data
+		this.map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, mapPath);
+		super();
+	}
+
 	override public function create() {
+		
 		// Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
-
-		// Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map04__json);
-
+		
 		// Show the hitboxes of game objects
 		// FlxG.debugger.drawDebug = true;
-
+		
 		// Load in the tilemap from the tilemap image
 		walls = map.loadTilemap(AssetPaths.dungeon_tiles__png, "walls");
 		walls.follow();
@@ -79,10 +101,10 @@ class Room04 extends FlxState {
 		add(walls);
 		// Generate a new random key
 		random = new FlxRandom();
-
+		
 		// Create a new timer
 		timer = new FlxTimer();
-
+		
 		// Create the player and add them to the screen
 		player = new Player(FlxG.width / 2, FlxG.height / 2);
 		player.health = Reg.PLAYERHEALTH;
@@ -126,28 +148,58 @@ class Room04 extends FlxState {
 		spawnEnemies();
 		spawnAmmo();
 
-		// Make the camera follow the player and overlay the HUD
-
+		// Zoom camera and follow player
 		FlxG.camera.zoom = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
+		
+		// Help button to show controls
+		helpButton = new FlxButton(0, 0, null, function() {
+			openSubState(new HelpState(0x6703378B));
+		});
+		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
+		helpButton.setGraphicSize(Std.int(32 / FlxG.camera.zoom), Std.int(32 / FlxG.camera.zoom));
+		helpButton.updateHitbox();
+		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16 / FlxG.camera.zoom, FlxG.camera.viewTop + 16 / FlxG.camera.zoom);
+		add(helpButton);
+		
+		// Pause button to pause the game
+		pauseButton = new FlxButton(0, 0, null, function() {
+			openSubState(new PauseState(0x6703378B));
+		});
+		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
+		pauseButton.setGraphicSize(Std.int(32 / FlxG.camera.zoom), Std.int(32 / FlxG.camera.zoom));
+		pauseButton.updateHitbox();
+		pauseButton.setPosition(helpButton.x, helpButton.y + helpButton.height);
+		add(pauseButton);
+
+		// overlay the HUD
 		hud = new HUD(player);
 		add(hud);
 
 		super.create();
 	}
 
-	var angle:Float;
-	var xDist:Float;
-	var yDist:Float;
-	var enemyDistX:Float;
-	var enemyDistY:Float;
-	var enemyAngle:Int;
-	// calculates the enemies projectiles
-	var enemyProjectileDistX:Float;
-	var enemyProjectileDistY:Float;
-	var enemyProjectileAngle:Float;
-	var rangedX:Array<Float>;
-	var rangedY:Array<Float>;
+	override public function onFocusLost() {
+		var pauseState = new PauseState(0x6703378B);
+		pauseState.closeCallback = backButton;
+		openSubState(pauseState);
+		super.onFocusLost();
+	}
+
+	override function openSubState(SubState:FlxSubState) {
+		remove(hud);
+		remove(helpButton);
+		remove(pauseButton);
+		SubState.closeCallback = backButton;
+		super.openSubState(SubState);
+	}
+
+	private function backButton() {
+		FlxG.camera.zoom = 2;
+		add(hud);
+		add(helpButton);
+		add(pauseButton);
+	}
 
 	override public function update(elapsed:Float) {
 		// Calculate the angle of the mouse relative to the player
@@ -360,7 +412,7 @@ class Room04 extends FlxState {
 						bigEnemies.add(enemy);
 				}
 
-				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, 100, 10, enemy, "health", 0, enemy.health, false);
+				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(100 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0, enemy.health, false);
 				enemyHealth.exists = true;
 				enemyHealth.killOnEmpty = true;
 
@@ -467,17 +519,17 @@ class Room04 extends FlxState {
 		// Determines which state to go to
 		switch (door.stateDestID) {
 			case 0:
-				FlxG.switchState(new PlayState());
+				FlxG.switchState(new Room(0, AssetPaths.map00__json));
 			case 1:
-				FlxG.switchState(new Room01());
+				FlxG.switchState(new Room(1, AssetPaths.map01__json));
 			case 2:
-				FlxG.switchState(new Room02());
+				FlxG.switchState(new Room(2, AssetPaths.map02__json));
 			case 3:
-				FlxG.switchState(new Room03());
+				FlxG.switchState(new Room(3, AssetPaths.map03__json));
 			case 4:
-				FlxG.switchState(new Room04());
+				FlxG.switchState(new Room(4, AssetPaths.map04__json));
 			case 5:
-				FlxG.switchState(new Room05());
+				FlxG.switchState(new Room(5, AssetPaths.map05__json));
 		}
 	}
 
