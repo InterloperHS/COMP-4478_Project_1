@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+    <sprite name="wasd" src="help_wasd" smooth="false" x="32" y="128" height="32" width="128"/>
+    <text name="movement_text" x="32" align="center" size="16" width="256" text="Use WASD or Arrow keys to move around">
+        <anchor y-flush="center" y="wasd.center"/>
+    </text>
+    <sprite name="arrow" src="help_arrow" smooth="false" x="32" height="32" width="128">
+        <anchor y-flush="center" y="wasd.center"/>
+    </sprite>
+    <align axis="horizontal" resize="false">
+        <bounds left="screen.left+32" right="screen.right-32"/>
+        <objects value="wasd,movement_text,arrow"/>
+    </align>
+
+    <sprite name="space" src="help_space" smooth="false" y="64" height="32" width="64">
+        <anchor y="wasd.bottom" x-flush="center" x="wasd.center"/>
+    </sprite>
+    <text name="fire_text" align="center" size="16" width="256" text="Target with mouse, and press Space or click primary mouse button to fire">
+        <anchor y-flush="center" y="space.center" x-flush="center" x="movement_text.center"/>
+    </text>
+    <sprite name="mouse" src="help_mouse" smooth="false" height="32" width="20">
+        <anchor y-flush="center" y="space.center" x-flush="center" x="arrow.center"/>
+    </sprite>
+    <button name="back" y="64" label="Back">
+		<param type="string" value="back"/>
+        <anchor y-flush="top" y="fire_text.bottom" x-flush="center" x="movement_text.center"/>
+	</button>
+</data>
