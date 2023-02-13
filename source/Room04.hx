@@ -131,9 +131,8 @@ class Room04 extends FlxState
 		spawnAmmo();
 
 		//Make the camera follow the player and overlay the HUD
-		FlxG.camera.setSize(320, 240);
-		FlxG.game.scaleX = 2;
-		FlxG.game.scaleY = 2;
+
+		FlxG.camera.zoom = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
 		hud = new HUD(player);
 		add(hud);
