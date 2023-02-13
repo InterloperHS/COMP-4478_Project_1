@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSubState;
 import flixel.ui.FlxButton;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
@@ -76,12 +77,14 @@ class Room extends FlxState {
 	var enemyProjectileAngle:Float;
 	var rangedX:Array<Float>;
 	var rangedY:Array<Float>;
+
 	override public function new(roomID:Int, mapPath:String) {
 		this.roomID = roomID;
 		// Load the map data from the Ogmo3 file with the current level data
 		this.map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, mapPath);
 		super();
 	}
+
 	override public function create() {
 		// Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
@@ -105,6 +108,12 @@ class Room extends FlxState {
 		player = new Player(FlxG.width / 2, FlxG.height / 2);
 		player.health = Reg.PLAYERHEALTH;
 		add(player);
+
+		// Make the camera follow the player and overlay the HUD
+		FlxG.camera.zoom = 2;
+		FlxG.camera.follow(player, TOPDOWN, 1);
+		hud = new HUD(player);
+		add(hud);
 
 		// Create the bullets group and set ammo
 		ammoNum = Reg.AMMO;
@@ -144,42 +153,48 @@ class Room extends FlxState {
 		spawnEnemies();
 		spawnAmmo();
 
-		// Make the camera follow the player and overlay the HUD
 		// Help button to show controls
-		helpButton = new FlxButton(0, 0, null, function _() {
-			var helpState = new HelpState(0x6703378B);
-			helpState.closeCallback = function _() {
-				FlxG.camera.zoom = 2;
-			};
-			openSubState(helpState);
+		helpButton = new FlxButton(0, 0, null, function() {
+			openSubState(new HelpState(0x6703378B));
 		});
 		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
-		helpButton.setGraphicSize(Std.int(32/FlxG.camera.zoom), Std.int(32/FlxG.camera.zoom));
+		helpButton.setGraphicSize(Std.int(32 / FlxG.camera.zoom), Std.int(32 / FlxG.camera.zoom));
 		helpButton.updateHitbox();
-		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16/FlxG.camera.zoom, FlxG.camera.viewTop+16/FlxG.camera.zoom);
+		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16 / FlxG.camera.zoom, FlxG.camera.viewTop + 16 / FlxG.camera.zoom);
 		add(helpButton);
 
 		// Pause button to pause the game
-		pauseButton = new FlxButton(0, 0, null, function _() {
-			var pauseState = new PauseState(0x6703378B);
-			pauseState.closeCallback = function _() {
-				FlxG.camera.zoom = 2;
-			};
-			openSubState(pauseState);
+		pauseButton = new FlxButton(0, 0, null, function() {
+			openSubState(new PauseState(0x6703378B));
 		});
 		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
-		pauseButton.setGraphicSize(Std.int(32/FlxG.camera.zoom), Std.int(32/FlxG.camera.zoom));
+		pauseButton.setGraphicSize(Std.int(32 / FlxG.camera.zoom), Std.int(32 / FlxG.camera.zoom));
 		pauseButton.updateHitbox();
 		pauseButton.setPosition(helpButton.x, helpButton.y + helpButton.height);
 		add(pauseButton);
-		
-		// Make the camera follow the player and overlay the HUD
-		FlxG.camera.zoom = 2;
-		FlxG.camera.follow(player, TOPDOWN, 1);
-		hud = new HUD(player);
-		add(hud);
-
 		super.create();
+	}
+
+	override public function onFocusLost() {
+		var pauseState = new PauseState(0x6703378B);
+		pauseState.closeCallback = backButton;
+		openSubState(pauseState);
+		super.onFocusLost();
+	}
+
+	override function openSubState(SubState:FlxSubState) {
+		remove(hud);
+		remove(helpButton);
+		remove(pauseButton);
+		SubState.closeCallback = backButton;
+		super.openSubState(SubState);
+	}
+
+	private function backButton() {
+		FlxG.camera.zoom = 2;
+		add(hud);
+		add(helpButton);
+		add(pauseButton);
 	}
 
 	override public function update(elapsed:Float) {
