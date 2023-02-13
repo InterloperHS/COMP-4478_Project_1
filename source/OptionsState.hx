@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSubState;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
@@ -10,7 +11,7 @@ import flixel.util.FlxColor;
 
 //** Sourced from https://github.com/HaxeFlixel/flixel-demos/blob/dev/Tutorials/TurnBasedRPG/source/OptionsState.hx **/
 
-class OptionsState extends FlxState {
+class OptionsState extends FlxSubState {
 	// define our screen elements
 	var titleText:FlxText;
 	var speedBar:FlxBar;
@@ -21,7 +22,10 @@ class OptionsState extends FlxState {
 	var clearDataButton:FlxButton;
 	var backButton:FlxButton;
 	var speed:Int;
-
+	
+	override public function new(BGColor:FlxColor) {
+		super(BGColor);
+	}
 	override public function create():Void {
         // Get player movement speed from the save file or
 		// use a default value of 5
@@ -65,10 +69,8 @@ class OptionsState extends FlxState {
 		backButton.y = FlxG.height - 28;
 		add(backButton);
 
-		// update our bar to show the current speed level
+		// update the speed bar to show the current speed level
 		updateSpeed();
-
-		FlxG.camera.fade(FlxColor.BLACK, 0.33, true);
 
 		super.create();
 	}
@@ -79,9 +81,7 @@ class OptionsState extends FlxState {
 	function clickBack() {
 		FlxG.save.data.speed = speed;
 		FlxG.save.flush();
-		FlxG.camera.fade(FlxColor.BLACK, .33, false, function() {
-			FlxG.switchState(new MenuState());
-		});
+		close();
 	}
 
 	/**
