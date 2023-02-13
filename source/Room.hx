@@ -133,10 +133,6 @@ class Room extends FlxState {
 		spawnAmmo();
 
 		// Make the camera follow the player and overlay the HUD
-
-		FlxG.camera.zoom = 2;
-		FlxG.camera.follow(player, TOPDOWN, 1);
-		hud = new HUD(player);
 		// Help button to show controls
 		helpButton = new FlxButton(0, 0, null, function _() {
 			var helpState = new HelpState(0x6703378B);
@@ -166,7 +162,9 @@ class Room extends FlxState {
 		add(pauseButton);
 		
 		// Make the camera follow the player and overlay the HUD
+		FlxG.camera.zoom = 2;
 		FlxG.camera.follow(player, TOPDOWN, 1);
+		hud = new HUD(player);
 		add(hud);
 
 		super.create();
