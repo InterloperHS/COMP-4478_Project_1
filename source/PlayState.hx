@@ -145,6 +145,25 @@ class PlayState extends FlxState
 		hud = new HUD(player);
 		add(hud);
 
+		// Help button to show controls
+		helpButton = new FlxButton(0,0, null, function _() {
+			openSubState(new HelpState(0x6703378B));
+		});
+		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
+		helpButton.setGraphicSize(32,32);
+		helpButton.updateHitbox();
+		helpButton.setPosition(FlxG.width - helpButton.width - 16 , 16);
+		add(helpButton);
+
+		// Pause button to pause the game
+		pauseButton = new FlxButton(0,0, null, function _() {
+			openSubState(new PauseState(0x6703378B));
+		});
+		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
+		pauseButton.setGraphicSize(32,32);
+		pauseButton.updateHitbox();
+		pauseButton.setPosition(FlxG.width - pauseButton.width - 16 , 16+helpButton.height);
+		add(pauseButton);
 		super.create();
 	}
 
@@ -224,25 +243,6 @@ class PlayState extends FlxState
 		//Check if player is hit by enemy bullet
 		FlxG.overlap(player, bullets2, hurtPlayerRanged);
 
-		// Help button to show controls
-		helpButton = new FlxButton(0,0, null, function _() {
-			openSubState(new HelpState(0x6703378B));
-		});
-		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
-		helpButton.setGraphicSize(32,32);
-		helpButton.updateHitbox();
-		helpButton.setPosition(FlxG.width - helpButton.width - 16 , 16);
-		add(helpButton);
-
-		// Pause button to pause the game
-		pauseButton = new FlxButton(0,0, null, function _() {
-			openSubState(new PauseState(0x6703378B));
-		});
-		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
-		pauseButton.setGraphicSize(32,32);
-		pauseButton.updateHitbox();
-		pauseButton.setPosition(FlxG.width - pauseButton.width - 16 , 16+helpButton.height);
-		add(pauseButton);
 		super.update(elapsed);
 	}
 
