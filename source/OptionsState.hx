@@ -11,7 +11,6 @@ import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 
 //** Sourced from https://github.com/HaxeFlixel/flixel-demos/blob/dev/Tutorials/TurnBasedRPG/source/OptionsState.hx **/
-
 class OptionsState extends FlxSubState {
 	// define our screen elements
 	var titleText:FlxText;
@@ -23,12 +22,13 @@ class OptionsState extends FlxSubState {
 	var clearDataButton:FlxButton;
 	var backButton:FlxButton;
 	var speed:Int;
-	
+
 	override public function new(BGColor:FlxColor) {
 		super(BGColor);
 	}
+
 	override public function create():Void {
-        // Get player movement speed from the save file or
+		// Get player movement speed from the save file or
 		// use a default value of 5
 		if (FlxG.save.data.speed != null) {
 			speed = FlxG.save.data.speed;
@@ -53,7 +53,8 @@ class OptionsState extends FlxSubState {
 		speedUpButton = new FlxButton(FlxG.width - 4 - speedDownButton.width, speedDownButton.y, "+", clickSpeedUp);
 		add(speedUpButton);
 
-		speedBar = new FlxBar(speedDownButton.x + speedDownButton.width + 4, speedDownButton.y, LEFT_TO_RIGHT, Std.int(FlxG.width - 4*5 - speedDownButton.width*2), Std.int(speedUpButton.height), null, null, 5, 20);
+		speedBar = new FlxBar(speedDownButton.x + speedDownButton.width + 4, speedDownButton.y, LEFT_TO_RIGHT,
+			Std.int(FlxG.width - 4 * 5 - speedDownButton.width * 2), Std.int(speedUpButton.height), null, null, 5, 20);
 		speedBar.createFilledBar(0xff464646, FlxColor.WHITE, true, FlxColor.WHITE);
 		add(speedBar);
 
@@ -91,9 +92,9 @@ class OptionsState extends FlxSubState {
 	 * The user clicked the down button for speed - we reduce the speed by 5 and update the bar
 	 */
 	function clickSpeedDown() {
-        if (speed > 5){
-		    speed -= 5;
-        }
+		if (speed > 5) {
+			speed -= 5;
+		}
 		updateSpeed();
 	}
 
@@ -102,8 +103,8 @@ class OptionsState extends FlxSubState {
 	 */
 	function clickSpeedUp() {
 		if (speed < 20) {
-            speed += 5;
-        }
+			speed += 5;
+		}
 		updateSpeed();
 	}
 

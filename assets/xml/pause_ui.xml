@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
 	<button name="stop" label="Stop">
-		<param type="string" value="stop"/>
+		<param type="string" value="stop" />
 	</button>
 	<button name="options" label="Options">
-		<param type="string" value="options"/>
+		<param type="string" value="options" />
 	</button>
 	<button name="back" label="Back">
-		<param type="string" value="back"/>
+		<param type="string" value="back" />
 	</button>
-	<position name="options" center_x= "true" center_y="true">
-		<anchor name="options" y-flush="middle"/>
+	<position name="options" center_x="true" center_y="true">
+		<anchor name="options" y-flush="middle" />
 	</position>
-	<position name="stop" center_x= "true">
-		<anchor name="stop" y-flush="bottom" y="options.top-2"/>
+	<position name="stop" center_x="true">
+		<anchor name="stop" y-flush="bottom" y="options.top-2" />
 	</position>
-	<position name="back" center_x= "true">
-		<anchor name="back" y-flush="top" y="options.bottom+2"/>
+	<position name="back" center_x="true">
+		<anchor name="back" y-flush="top" y="options.bottom+2" />
 	</position>
 </data>

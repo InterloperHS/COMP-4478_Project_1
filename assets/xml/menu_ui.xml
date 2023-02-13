@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
 	<button name="play" label="Play">
-		<param type="string" value="play"/>
+		<param type="string" value="play" />
 	</button>
 	<button name="options" label="Options">
-		<param type="string" value="options"/>
+		<param type="string" value="options" />
 	</button>
 	<button name="help" label="Help">
-		<param type="string" value="help"/>
+		<param type="string" value="help" />
 	</button>
-	<position name="play" center_x= "true" center_y="true" y="-play.height-2">
-		<anchor name="play" y-flush="middle"/>
+	<position name="play" center_x="true" center_y="true" y="-play.height-2">
+		<anchor name="play" y-flush="middle" />
 	</position>
-	<position name="options" center_x= "true" center_y="true" y="options.height+2">
-		<anchor name="options" y-flush="middle"/>
+	<position name="options" center_x="true" center_y="true" y="options.height+2">
+		<anchor name="options" y-flush="middle" />
 	</position>
 	<position name="help" x="-16" y="16">
-		<anchor name="help" x-flush="right" x="screen.right"/>
+		<anchor name="help" x-flush="right" x="screen.right" />
 	</position>
 
 </data>
