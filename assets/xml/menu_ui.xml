@@ -3,17 +3,23 @@
 	<button name="play" label="Play">
 		<param type="string" value="play" />
 	</button>
+	<button name="story" label="Story">
+		<param type="string" value="story" />
+	</button>
 	<button name="options" label="Options">
 		<param type="string" value="options" />
 	</button>
 	<button name="help" label="Help">
 		<param type="string" value="help" />
 	</button>
-	<position name="play" center_x="true" center_y="true" y="-play.height-2">
-		<anchor name="play" y-flush="middle" />
+	<position name="story" center_x="true" center_y="true">
+		<anchor name="story" y-flush="middle" />
 	</position>
-	<position name="options" center_x="true" center_y="true" y="options.height+2">
-		<anchor name="options" y-flush="middle" />
+	<position name="play" center_x="true">
+		<anchor name="play" y-flush="bottom" y="story.top-2"/>
+	</position>
+	<position name="options" center_x="true">
+		<anchor name="options" y-flush="top" y="story.bottom+2"/>
 	</position>
 	<position name="help" x="-16" y="16">
 		<anchor name="help" x-flush="right" x="screen.right" />
