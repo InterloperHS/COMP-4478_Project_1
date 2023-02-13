@@ -6,28 +6,25 @@ import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.ui.FlxButton;
 import flixel.FlxState;
+import flixel.addons.ui.FlxUIState;
 
-class MenuState extends FlxState
-{
-    var playButton:FlxButton;
-    var optionsButton:FlxButton;
-    override public function create() {        
-        playButton = new FlxButton(0, 0, "Play", clickPlay);
-        playButton.screenCenter(FlxAxes.X);
-        playButton.y = (FlxG.height/2) - (playButton.height/2) - 16;
-        add(playButton);
-        
-        optionsButton = new FlxButton(0, 0, "Options", clickOptions);
-        optionsButton.screenCenter(FlxAxes.X);
-        optionsButton.y = (FlxG.height/2) - (optionsButton.height/2) + 16;
-        add(optionsButton);
+class MenuState extends FlxUIState {
+    
+	override public function create() {
+		_xml_id = "menu_ui";
+		super.create();
+	}
 
-        super.create();
-    }
-    function clickPlay() {
-        FlxG.switchState(new PlayState());
-    }
-    function clickOptions() {
-        FlxG.switchState(new OptionsState());
-    }
+	override public function getEvent(event:String, target:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
+		if (params != null) {
+			switch (event) {
+				case "click_button":
+					switch (Std.string(params[0])) {
+                        case "play": FlxG.switchState(new PlayState());
+                        case "options": openSubState(new OptionsState(FlxColor.BLACK));
+                        case "help": openSubState(new HelpState(FlxColor.BLACK));
+					}
+			}
+		}
+	}
 }
