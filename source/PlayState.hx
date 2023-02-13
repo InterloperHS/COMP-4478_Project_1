@@ -1,5 +1,7 @@
 package;
 
+import flixel.text.FlxText.FlxTextAlign;
+import flixel.ui.FlxButton;
 import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -36,6 +38,8 @@ class PlayState extends FlxState
 	var maxTimerCounter:Float = 0.25;
 	// Create game HUD
 	var hud:HUD = new HUD();
+	var helpButton:FlxButton;
+	var pauseButton:FlxButton;
 
 	override public function create()
 	{		
@@ -174,6 +178,25 @@ class PlayState extends FlxState
 		}
 		//trace(ammoNum);
 
+		// Help button to show controls
+		helpButton = new FlxButton(0,0, null, function _() {
+			openSubState(new HelpState(0x6703378B));
+		});
+		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
+		helpButton.setGraphicSize(32,32);
+		helpButton.updateHitbox();
+		helpButton.setPosition(FlxG.width - helpButton.width - 16 , 16);
+		add(helpButton);
+
+		// Pause button to pause the game
+		pauseButton = new FlxButton(0,0, null, function _() {
+			openSubState(new PauseState(0x6703378B));
+		});
+		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
+		pauseButton.setGraphicSize(32,32);
+		pauseButton.updateHitbox();
+		pauseButton.setPosition(FlxG.width - pauseButton.width - 16 , 16+helpButton.height);
+		add(pauseButton);
 		super.update(elapsed);
 	}
 
