@@ -21,7 +21,7 @@ class PauseState extends FlxUISubState {
 					switch (Std.string(params[0])) {
 						case "stop": FlxG.switchState(new MenuState());
                         case "options": openSubState(new OptionsState(0x6703378B));
-						case "close": close();
+						case "back": close();
 					}
 			}
 		}

@@ -19,7 +19,7 @@ class HelpState extends FlxUISubState {
 			switch (event) {
 				case "click_button":
 					switch (Std.string(params[0])) {
-						case "close": close();
+						case "back": close();
 					}
 			}
 		}
