@@ -88,7 +88,7 @@ class Room extends FlxState {
 	override public function create() {
 		
 		// Change the mouse cursor to a crosshair
-		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
+		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
 		
 		// Show the hitboxes of game objects
 		// FlxG.debugger.drawDebug = true;
@@ -150,7 +150,7 @@ class Room extends FlxState {
 
 		// Zoom camera and follow player
 		FlxG.camera.zoom = 2;
-		FlxG.camera.follow(player, TOPDOWN, 1);
+		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
 		
 		// Help button to show controls
 		helpButton = new FlxButton(0, 0, null, function() {
