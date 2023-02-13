@@ -1,7 +1,6 @@
 package;
 
 import flixel.ui.FlxButton;
-import flixel.util.FlxColor;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.FlxG;

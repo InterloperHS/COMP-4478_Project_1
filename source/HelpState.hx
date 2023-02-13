@@ -1,6 +1,5 @@
 package;
 
-import flixel.FlxCamera;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUISubState;

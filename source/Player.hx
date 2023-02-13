@@ -2,9 +2,7 @@ package;
 
 import flixel.ui.FlxBar;
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
 import flixel.FlxG;
-import flixel.math.FlxPoint;
 import flixel.math.FlxAngle;
 
 class Player extends FlxSprite {

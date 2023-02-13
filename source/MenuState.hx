@@ -1,11 +1,7 @@
 package;
 
-import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
-import flixel.text.FlxText;
 import flixel.FlxG;
-import flixel.ui.FlxButton;
-import flixel.FlxState;
 import flixel.addons.ui.FlxUIState;
 
 class MenuState extends FlxUIState {

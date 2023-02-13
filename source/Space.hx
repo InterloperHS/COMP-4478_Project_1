@@ -1,14 +1,9 @@
 package;
 
 import flixel.FlxSprite;
-import flixel.animation.FlxAnimation;
 import flixel.FlxState;
 import flixel.FlxG;
-import flixel.util.FlxTimer;
 import flixel.text.FlxText;
-import flixel.math.FlxMath;
-import flixel.group.FlxGroup;
-import flixel.math.FlxPoint;
 import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 

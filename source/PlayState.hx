@@ -1,9 +1,6 @@
 package;
 
-import flixel.text.FlxText.FlxTextAlign;
 import flixel.ui.FlxButton;
-import haxe.io.Float32Array;
-import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -11,9 +8,7 @@ import flixel.util.FlxTimer;
 import flixel.ui.FlxBar;
 import flixel.FlxState;
 import flixel.FlxSprite;
-import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxColor;
-import flixel.input.keyboard.FlxKey;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;

@@ -3,7 +3,6 @@ package;
 import flixel.util.FlxColor;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
-import flixel.FlxG;
 
 class Enemy extends FlxSprite {
 	var target:Player;

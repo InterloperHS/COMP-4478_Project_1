@@ -1,9 +1,7 @@
 package;
 
-import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.FlxG;
-import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;

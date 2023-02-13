@@ -1,7 +1,6 @@
 package;
 
 import flixel.util.FlxColor;
-import flixel.FlxState;
 import flixel.FlxSprite;
 
 class Door extends FlxSprite {
