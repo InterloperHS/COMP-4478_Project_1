@@ -1,9 +1,5 @@
 package;
 
-
-import flixel.text.FlxText.FlxTextAlign;
-import flixel.ui.FlxButton;
-import haxe.io.Float32Array;
 import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.tile.FlxTilemap;
@@ -23,7 +19,7 @@ import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
 
-class PlayState extends FlxState
+class Room01 extends FlxState
 {
 	//Enemy related variables
 	var bullets:FlxTypedGroup<FlxSprite>;
@@ -43,7 +39,7 @@ class PlayState extends FlxState
 	var enemyHealthBars:FlxTypedGroup<FlxBar>;
 	var enemyHealth:FlxBar;
 
-	var roomID:Int = 0;	
+	var roomID:Int = 1;	
 	var random:FlxRandom;
 	var ammoNum:Int;
 	var ammoBoxes:FlxTypedGroup<FlxSprite>;
@@ -62,9 +58,6 @@ class PlayState extends FlxState
 	var timerStart:Bool = false;
 	var timerStart2:Bool = false;
 	var maxTimerCounter:Float = 0.25;
-
-	var helpButton:FlxButton;
-	var pauseButton:FlxButton;
 	var moving:Bool = false;
 	var attackRan:Int;
 
@@ -77,7 +70,7 @@ class PlayState extends FlxState
 		FlxG.mouse.load("assets/images/crosshair.png", 0.075, -8, -10);
 
 		//Load the map data from the Ogmo3 file with the current level data
-		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map00__json);
+		map = new FlxOgmo3Loader(AssetPaths.compproject1V2__ogmo, AssetPaths.map01__json);
 
 		//Show the hitboxes of game objects
 		//FlxG.debugger.drawDebug = true;
@@ -224,25 +217,6 @@ class PlayState extends FlxState
 		//Check if player is hit by enemy bullet
 		FlxG.overlap(player, bullets2, hurtPlayerRanged);
 
-		// Help button to show controls
-		helpButton = new FlxButton(0,0, null, function _() {
-			openSubState(new HelpState(0x6703378B));
-		});
-		helpButton.loadGraphic(AssetPaths.help_question__png, true, 16, 16);
-		helpButton.setGraphicSize(32,32);
-		helpButton.updateHitbox();
-		helpButton.setPosition(FlxG.width - helpButton.width - 16 , 16);
-		add(helpButton);
-
-		// Pause button to pause the game
-		pauseButton = new FlxButton(0,0, null, function _() {
-			openSubState(new PauseState(0x6703378B));
-		});
-		pauseButton.loadGraphic(AssetPaths.pause_button__png, true, 16, 16);
-		pauseButton.setGraphicSize(32,32);
-		pauseButton.updateHitbox();
-		pauseButton.setPosition(FlxG.width - pauseButton.width - 16 , 16+helpButton.height);
-		add(pauseButton);
 		super.update(elapsed);
 	}
 
