@@ -12,6 +12,8 @@ class MenuState extends FlxUIState {
     
 	override public function create() {
 		_xml_id = "menu_ui";
+		//Reset registry if needed
+        Reg.resetReg();
 		super.create();
 	}
 
