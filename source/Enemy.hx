@@ -78,9 +78,9 @@ class Enemy extends FlxSprite {
 	}
 
 	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
 		if (speed != 0)
 			enemyMovement();
+		super.update(elapsed);
 		// if(speed == 0) enemyShoot();
 	}
 

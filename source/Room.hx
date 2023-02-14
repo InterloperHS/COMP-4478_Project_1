@@ -247,7 +247,7 @@ class Room extends FlxState {
 		FlxG.overlap(ammoBoxes, player, addAmmo);
 
 		// Check if player is touching an enemy
-		FlxG.overlap(player, enemies, hurtPlayer);
+		FlxG.collide(player, enemies, hurtPlayer);
 		FlxG.overlap(player, bigEnemies, hurtPlayer);
 
 		// Update the ammo display text
@@ -319,12 +319,12 @@ class Room extends FlxState {
 	}
 
 	public function hurtPlayer(p:Player, e:FlxObject) {
-		// Flash the camera so the player knows they were hit
-		FlxG.camera.flash(FlxColor.WHITE, 1);
-		// Make the player and enemy knockback from each other
-		FlxG.collide(p, e);
 		// If they were not already just hit, subtract health and check if they should be killed
 		if (!FlxFlicker.isFlickering(p)) {
+			// Flash the camera so the player knows they were hit
+			FlxG.camera.flash(FlxColor.WHITE, 1);
+			// Flicker the Player sprite to give player "immunity" for a frew seconds
+			FlxFlicker.flicker(p);
 			p.health -= 25;
 			Reg.PLAYERHEALTH = p.health;
 			if (p.health <= 0) {
@@ -332,8 +332,6 @@ class Room extends FlxState {
 				FlxG.switchState(new GameOverState(LOSE));
 			}
 		}
-		// Flicker the Player sprite to give player "immunity" for a frew seconds
-		FlxFlicker.flicker(p);
 	}
 
 	public function hurtPlayerRanged(p:Player, b:FlxObject) {
