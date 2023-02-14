@@ -1,45 +1,45 @@
 package;
 
-import flixel.ui.FlxButton;
-import flixel.FlxState;
-import flixel.text.FlxText;
 import flixel.FlxG;
+import flixel.addons.ui.FlxUIState;
 
-class GameoverState extends FlxState {
-	// Variables
-	var gameovertext:FlxText;
-	var extraText:FlxText;
-	var replayButton:FlxButton;
-	var menuButton:FlxButton;
+enum WinLoseState {
+	WIN;
+	LOSE;
+}
 
-	override public function create():Void {
+class GameOverState extends FlxUIState {
+	var winState:WinLoseState = LOSE;
+
+	override public function new(winState:WinLoseState) {
+		super();
+		this.winState = winState;
+	}
+
+	override function create() {
+		FlxG.camera.zoom = 1;
+		_xml_id = "game_over";
 		super.create();
-		// Reset the camera back to what it was
-		FlxG.camera.setSize(640, 480);
-		FlxG.game.scaleX = 1;
-		FlxG.game.scaleY = 1;
-
-		// Unload the custom mouse graphic to return to default
-		FlxG.mouse.unload();
-
-		// Tell the user that the game is over
-		gameovertext = new FlxText(FlxG.width / 2 - 100, 50, 200, "Game Over!", 50);
-		extraText = new FlxText(FlxG.width / 2 - 250, 250, 500,
-			"Unfortunately, you died. You were our last hope and now the zombies will take over the planet!", 16);
-		add(gameovertext);
-		add(extraText);
-
-		// Have a button for going back to menu
-		replayButton = new FlxButton(FlxG.width / 2 - 50, 350, "Menu", onMenu);
-		add(replayButton);
+		switch (winState) {
+			case WIN:
+				_ui.getFlxText("title").text = "You Win!";
+				_ui.getFlxText("description").text = "You managed to kill all those zombies. Too bad they found a cure, and now you are a murderer!";
+			default:
+			case LOSE:
+				_ui.getFlxText("title").text = "Game Over!";
+				_ui.getFlxText("description").text = "Unfortunately, you died. You were our last hope and now the zombies will take over the planet!";
+		}
 	}
 
-	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
-	}
-
-	function onMenu() {
-		// Go back to menu
-		FlxG.switchState(new MenuState());
+	// Click events for buttons
+	override public function getEvent(event:String, target:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
+		if (params != null) {
+			switch (event) {
+				case "click_button":
+					switch (Std.string(params[0])) {
+						case "replay": FlxG.switchState(new MenuState());
+					}
+			}
+		}
 	}
 }

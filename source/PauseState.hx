@@ -15,6 +15,7 @@ class PauseState extends FlxUISubState {
 		super.create();
 	}
 
+	// Click events for buttons
 	override public function getEvent(event:String, target:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
 		if (params != null) {
 			switch (event) {
