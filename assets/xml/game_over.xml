@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <text name="title" y="96" size="16" center_x="true" align="center">
+        <anchor name="title" y-flush="top" y="screen.top" />
+    </text>
+    <text name="description" size="12" center_x="true" align="center">
+        <anchor name="description" y-flush="top" y="title.bottom+8" />
+    </text>
+    <align axis="horizontal" resize="true">
+        <bounds left="screen.left+16" right="screen.right-16" />
+        <objects value="title" />
+    </align>
+    <align axis="horizontal" resize="true">
+        <bounds left="screen.left+16" right="screen.right-16" />
+        <objects value="description" />
+    </align>
+    <button name="replay" y="64" label="Replay" width="64" height="32">
+        <text size="12" align="center" color="0x000000" />
+        <param type="string" value="replay" />
+        <anchor y-flush="top" y="description.bottom" x-flush="center" x="title.center" />
+    </button>
+</data>

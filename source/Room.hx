@@ -313,7 +313,7 @@ class Room extends FlxState {
 					winCon = false;
 			}
 			if (winCon) {
-				FlxG.switchState(new WinState());
+				FlxG.switchState(new GameOverState(WIN));
 			}
 		}
 	}
@@ -329,7 +329,7 @@ class Room extends FlxState {
 			Reg.PLAYERHEALTH = p.health;
 			if (p.health <= 0) {
 				p.kill();
-				FlxG.switchState(new GameoverState());
+				FlxG.switchState(new GameOverState(LOSE));
 			}
 		}
 		// Flicker the Player sprite to give player "immunity" for a frew seconds
