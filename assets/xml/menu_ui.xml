@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<button name="play" label="Play">
+	<text name="title" y="96" text="Zombie Topdown Shooter" size="16" center_x="true" align="center">
+		<anchor name="title" y-flush="top" y="screen.top" />
+	</text>
+	<text name="description"
+		text="A zombie invasion has appeared after aliens discovered our planet! It's your job to defeat them and make sure that they don't escape their biggest target, the dungeon building!"
+		size="12" center_x="true" align="center">
+		<anchor name="description" y-flush="top" y="title.bottom+8" />
+	</text>
+	<align axis="horizontal" resize="true">
+		<bounds left="screen.left+16" right="screen.right-16" />
+		<objects value="title" />
+	</align>
+	<align axis="horizontal" resize="true">
+		<bounds left="screen.left+16" right="screen.right-16" />
+		<objects value="description" />
+	</align>
+	<button name="play" label="Play" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="play" />
 	</button>
-	<button name="story" label="Story">
+	<button name="story" label="Story" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="story" />
 	</button>
-	<button name="options" label="Options">
+	<button name="options" label="Options" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="options" />
 	</button>
 	<button name="help" label="Help">
 		<param type="string" value="help" />
 	</button>
-	<position name="story" center_x="true" center_y="true">
-		<anchor name="story" y-flush="middle" />
+	<position name="play" center_y="true" center_x="true">
+		<anchor name="play" x-flush="middle" y="story.top-4" />
 	</position>
-	<position name="play" center_x="true">
-		<anchor name="play" y-flush="bottom" y="story.top-2"/>
+	<position name="story" center_y="true" x="-16">
+		<anchor name="story" x-flush="right" x="play.left" />
 	</position>
-	<position name="options" center_x="true">
-		<anchor name="options" y-flush="top" y="story.bottom+2"/>
+	<position name="options" center_y="true" x="16">
+		<anchor name="options" x-flush="left" x="play.right" />
 	</position>
-	<position name="help" x="-16" y="16">
+	<position name="help" x="-16" y="16" width="64" height="32">
 		<anchor name="help" x-flush="right" x="screen.right" />
 	</position>
 

@@ -23,7 +23,8 @@
     <sprite name="mouse" src="help_mouse" smooth="false" height="32" width="20">
         <anchor y-flush="center" y="space.center" x-flush="center" x="arrow.center" />
     </sprite>
-    <button name="back" y="64" label="Back">
+    <button name="back" y="64" label="Back" width="64" height="32">
+        <text size="12" align="center" color="0x000000" />
         <param type="string" value="back" />
         <anchor y-flush="top" y="fire_text.bottom" x-flush="center" x="movement_text.center" />
     </button>

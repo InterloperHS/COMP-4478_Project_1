@@ -25,8 +25,8 @@ class HUD extends FlxTypedGroup<FlxSprite> {
 		ammoText.setBorderStyle(SHADOW, FlxColor.GRAY, 1 / FlxG.camera.zoom, 1);
 		ammoText.setFormat(null, Std.int(16 / FlxG.camera.zoom), FlxColor.WHITE, FlxTextAlign.LEFT);
 		// Create player health bar that is linked to the player health sent in the new() constructor
-		pHealthBar = new FlxBar(ammoText.x + ammoText.width + 16 / FlxG.camera.zoom, ammoText.y, LEFT_TO_RIGHT,
-			Std.int(200 / FlxG.camera.zoom), Std.int(ammoText.height), player, "health", 0, 100, false);
+		pHealthBar = new FlxBar(ammoText.x + ammoText.width + 16 / FlxG.camera.zoom, ammoText.y, LEFT_TO_RIGHT, Std.int(200 / FlxG.camera.zoom),
+			Std.int(ammoText.height), player, "health", 0, 100, false);
 
 		add(background);
 		add(ammoText);

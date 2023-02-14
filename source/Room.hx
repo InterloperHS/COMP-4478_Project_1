@@ -86,13 +86,12 @@ class Room extends FlxState {
 	}
 
 	override public function create() {
-		
 		// Change the mouse cursor to a crosshair
 		FlxG.mouse.load("assets/images/crosshair.png", 0.12, -18, -18);
-		
+
 		// Show the hitboxes of game objects
 		// FlxG.debugger.drawDebug = true;
-		
+
 		// Load in the tilemap from the tilemap image
 		walls = map.loadTilemap(AssetPaths.dungeon_tiles__png, "walls");
 		walls.follow();
@@ -101,10 +100,10 @@ class Room extends FlxState {
 		add(walls);
 		// Generate a new random key
 		random = new FlxRandom();
-		
+
 		// Create a new timer
 		timer = new FlxTimer();
-		
+
 		// Create the player and add them to the screen
 		player = new Player(FlxG.width / 2, FlxG.height / 2);
 		player.health = Reg.PLAYERHEALTH;
@@ -151,7 +150,7 @@ class Room extends FlxState {
 		// Zoom camera and follow player
 		FlxG.camera.zoom = 2;
 		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
-		
+
 		// Help button to show controls
 		helpButton = new FlxButton(0, 0, null, function() {
 			openSubState(new HelpState(0x6703378B));
@@ -161,7 +160,7 @@ class Room extends FlxState {
 		helpButton.updateHitbox();
 		helpButton.setPosition(FlxG.camera.viewRight - helpButton.width - 16 / FlxG.camera.zoom, FlxG.camera.viewTop + 16 / FlxG.camera.zoom);
 		add(helpButton);
-		
+
 		// Pause button to pause the game
 		pauseButton = new FlxButton(0, 0, null, function() {
 			openSubState(new PauseState(0x6703378B));
@@ -199,6 +198,7 @@ class Room extends FlxState {
 		add(hud);
 		add(helpButton);
 		add(pauseButton);
+		// player.updateSpeed();
 	}
 
 	override public function update(elapsed:Float) {
@@ -388,15 +388,13 @@ class Room extends FlxState {
 				switch (spawnEnemyType[i]) {
 					// Normal Enemies
 					case 0:
-						enemy = new Enemy(-200, -200, player, 20);
-						enemy.makeGraphic(10, 10, FlxColor.RED);
+						enemy = new Enemy(-200, -200, player, 20, "normal");
 						enemy.exists = true;
 						enemy.health = 100;
 						enemies.add(enemy);
 					// Ranged Enemies
 					case 1:
-						enemy = new Enemy(-200, -200, player, 0);
-						enemy.makeGraphic(10, 10, FlxColor.YELLOW);
+						enemy = new Enemy(-200, -200, player, 0, "ranged");
 						enemy.exists = true;
 						enemy.health = 20;
 						rangedEnemies.add(enemy);
@@ -405,14 +403,14 @@ class Room extends FlxState {
 						rangeCanFire.push(true);
 					// Large Enemies
 					case 2:
-						enemy = new Enemy(-200, -200, player, 10);
-						enemy.makeGraphic(40, 40, FlxColor.GREEN);
+						enemy = new Enemy(-200, -200, player, 10, "large");
 						enemy.exists = true;
 						enemy.health = 240;
 						bigEnemies.add(enemy);
 				}
 
-				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(100 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0, enemy.health, false);
+				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(100 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0,
+					enemy.health, false);
 				enemyHealth.exists = true;
 				enemyHealth.killOnEmpty = true;
 

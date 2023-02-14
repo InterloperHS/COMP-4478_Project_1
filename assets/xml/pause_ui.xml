@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<button name="stop" label="Stop">
-		<param type="string" value="stop" />
-	</button>
-	<button name="options" label="Options">
-		<param type="string" value="options" />
-	</button>
-	<button name="back" label="Back">
+	<button name="back" label="Back" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="back" />
 	</button>
-	<position name="options" center_x="true" center_y="true">
-		<anchor name="options" y-flush="middle" />
-	</position>
-	<position name="stop" center_x="true">
-		<anchor name="stop" y-flush="bottom" y="options.top-2" />
+	<button name="stop" label="Stop" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
+		<param type="string" value="stop" />
+	</button>
+	<button name="options" label="Options" width="80" height="32">
+		<text size="12" align="center" color="0x000000" />
+		<param type="string" value="options" />
+	</button>
+	<position name="stop" center_x="true" center_y="true">
+		<anchor y-flush="middle" />
 	</position>
 	<position name="back" center_x="true">
-		<anchor name="back" y-flush="top" y="options.bottom+2" />
+		<anchor y-flush="bottom" y="stop.top-4" />
+	</position>
+	<position name="options" center_x="true">
+		<anchor y-flush="top" y="stop.bottom+4" />
 	</position>
 </data>

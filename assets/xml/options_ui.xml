@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <text name="title" y="64" text="Options" size="16" center_x="true" align="center">
+        <anchor name="title" y-flush="top" y="screen.top" />
+    </text>
+    <text name="speed_text" y="16" text="Speed" size="12" center_x="true" align="center">
+        <anchor name="title" y-flush="top" y="title.bottom" />
+    </text>
+    <button name="speed_down" width="32" height="32" y="32" x="32" label="-">
+        <param type="string" value="speed_down" />
+        <anchor y-flush="top" y="speed_text.bottom" x-flush="left" x="screen.left" />
+        <text size="16" align="center" color="0x000000" />
+    </button>
+    <button name="speed_up" width="32" height="32" y="32" x="-32" label="+">
+        <param type="string" value="speed_up" />
+        <anchor y-flush="top" y="speed_text.bottom" x-flush="right" x="screen.right" />
+        <text size="16" align="center" color="0x000000" />
+    </button>
+    <text name="speed_value" size="16" align="center" center_x="true">
+        <anchor y-flush="center" y="speed_down.center" />
+    </text>
+    <button name="back" y="-64" label="Back" width="64" height="32" center_x="true">
+        <text size="12" align="center" color="0x000000" />
+        <param type="string" value="back" />
+        <anchor y-flush="bottom" y="screen.bottom" />
+    </button>
+</data>
