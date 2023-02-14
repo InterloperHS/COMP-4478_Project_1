@@ -17,6 +17,7 @@ class GameOverState extends FlxUIState {
 	}
 
 	override function create() {
+		FlxG.mouse.unload();
 		FlxG.camera.zoom = 1;
 		_xml_id = "game_over";
 		super.create();
