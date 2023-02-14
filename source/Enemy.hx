@@ -38,12 +38,41 @@ class Enemy extends FlxSprite {
 	}
 
 	function enemyMovement() {
-		var enemyDistX:Float = this.x - target.x;
-		var enemyDistY:Float = this.y - target.y;
+		// var enemyDistX:Float = this.x - target.x;
+		// var enemyDistY:Float = this.y - target.y;
+		// var enemyDist = Math.sqrt((enemyDistX * enemyDistX) + (enemyDistY * enemyDistY));
+		// velocity.y = (enemyDistY / enemyDist) * -speed;
+		// velocity.x = (enemyDistX / enemyDist) * -speed;
 
-		var enemyDist = Math.sqrt((enemyDistX * enemyDistX) + (enemyDistY * enemyDistY));
-		velocity.y = (enemyDistY / enemyDist) * -speed;
-		velocity.x = (enemyDistX / enemyDist) * -speed;
+		// Angle between the enemy and the player
+		var moveAngle = FlxAngle.angleBetween(this, target, true);
+		var moveDirection:String = "D";
+		// Set direction based on orientation from player to mouse
+		if (moveAngle > -157.5 && moveAngle <= -112.5) {
+			moveDirection = "UL";
+		} else if (moveAngle > -112.5 && moveAngle <= -67.5) {
+			moveDirection = "U";
+		} else if (moveAngle > -67.5 && moveAngle <= -22.5) {
+			moveDirection = "UR";
+		} else if (moveAngle > -22.5 && moveAngle <= 22.5) {
+			moveDirection = "R";
+		} else if (moveAngle > 22.5 && moveAngle <= 67.5) {
+			moveDirection = "DR";
+		} else if (moveAngle > 67.5 && moveAngle <= 112.5) {
+			moveDirection = "D";
+		} else if (moveAngle > 112.5 && moveAngle <= 157.5) {
+			moveDirection = "DL";
+		} else if ((moveAngle > 157.5 && moveAngle <= 180) || (moveAngle > -180 && moveAngle <= -157.5)) {
+			moveDirection = "L";
+		}
+		velocity.setPolarDegrees(speed, moveAngle);
+
+		// Set the animation to idle by default, change to walk if the enemy is moving
+		var action = "idle";
+		if ((velocity.x != 0 || velocity.y != 0) && touching == NONE) {
+			action = "walk";
+		}
+		animation.play(action + moveDirection);
 	}
 
 	function enemyShoot() {
