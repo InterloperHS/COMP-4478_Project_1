@@ -14,11 +14,15 @@ class Reg {
 	// Variable to keep track of health for player
 	public static var PLAYERHEALTH:Float = 100;
 
+	// Variable to keep track of speed for player
+	public static var SPEED:Int = 10;
+
 	// Reset registry to default values
 	public static function resetReg() {
 		ENEMIES = [1, 4, 3, 2, 0, 3];
 		AMMO = 20;
 		PLAYERHEALTH = 100;
 		ENTRY = 0;
+		SPEED = 10;
 	}
 }
