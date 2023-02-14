@@ -26,7 +26,7 @@ class MenuState extends FlxUIState {
 					switch (Std.string(params[0])) {
 						case "play": FlxG.switchState(new PlayState());
 						case "story": FlxG.switchState(new Laboratory());
-						case "options": openSubState(new OptionsState(FlxColor.BLACK));
+						case "options": openSubState(new OptionsState());
 						case "help": openSubState(new HelpState(FlxColor.BLACK));
 					}
 			}

@@ -9,8 +9,8 @@ import flixel.util.FlxColor;
 class OptionsState extends FlxUISubState {
 	var speedValue:FlxText;
 
-	override public function new(BGColor:FlxColor) {
-		super(BGColor);
+	override public function new() {
+		super(FlxColor.BLACK);
 	}
 
 	override public function create():Void {
