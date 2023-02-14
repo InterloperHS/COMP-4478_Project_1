@@ -118,7 +118,7 @@ class Room extends FlxState {
 		var sprite:FlxSprite;
 		for (i in 0...numBullets) {
 			sprite = new FlxSprite(-100, -100);
-			sprite.makeGraphic(8, 2);
+			sprite.makeGraphic(8, 2,0xffc88033);
 			sprite.exists = false;
 			bullets.add(sprite);
 		}
@@ -432,15 +432,20 @@ class Room extends FlxState {
 		// Create as many ammo boxes as there are spawning locations
 		for (i in 0...spawnAmmoX.length) {
 			ammoBox = new FlxSprite(-200, -200);
-			ammoBox.makeGraphic(10, 10, FlxColor.BLUE);
+			ammoBox.loadGraphic("assets/images/ammosprite.png", true, 13, 16);
+		ammoBox.animation.add("aimate", [0, 1,2,3,2,1,0], 8, true);
+
+
 			ammoBox.exists = true;
 			ammoBoxes.add(ammoBox);
 
 			// Set the ammo box to the i spawn location
 			ammoBox.x = spawnAmmoX[i];
 			ammoBox.y = spawnAmmoY[i];
+			ammoBox.animation.play("aimate");
 		}
 	}
+
 
 	public function deleteEnemyBullet(b:FlxObject, p:FlxSprite) {
 		b.kill();
