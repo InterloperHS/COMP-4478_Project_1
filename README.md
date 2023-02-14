@@ -2,6 +2,9 @@
 
 Project 1 for COMP-4478-WA/WDE_Group_2
 
+A top-down zombie shooter game
+
+
 |                GROUP 2 | MEMBERS        |
 | ---------------------: | :------------- |
 | Abed Alhalim Ezz Aldin | Jacob Lavoie   |
