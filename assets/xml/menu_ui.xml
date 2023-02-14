@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<text name="title" y="96"  text="Zombie Topdown Shooter" size="16" center_x="true" align="center">
+	<text name="title" y="96" text="Zombie Topdown Shooter" size="16" center_x="true" align="center">
 		<anchor name="title" y-flush="top" y="screen.top" />
 	</text>
 	<text name="description"
@@ -17,15 +17,15 @@
 		<objects value="description" />
 	</align>
 	<button name="play" label="Play" width="80" height="32">
-		<text size="12" align="center" color="0x000000"/>
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="play" />
 	</button>
 	<button name="story" label="Story" width="80" height="32">
-		<text size="12" align="center" color="0x000000"/>
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="story" />
 	</button>
 	<button name="options" label="Options" width="80" height="32">
-		<text size="12" align="center" color="0x000000"/>
+		<text size="12" align="center" color="0x000000" />
 		<param type="string" value="options" />
 	</button>
 	<button name="help" label="Help">
@@ -35,7 +35,7 @@
 		<anchor name="play" x-flush="middle" y="story.top-4" />
 	</position>
 	<position name="story" center_y="true" x="-16">
-		<anchor name="story" x-flush="right" x="play.left"/>
+		<anchor name="story" x-flush="right" x="play.left" />
 	</position>
 	<position name="options" center_y="true" x="16">
 		<anchor name="options" x-flush="left" x="play.right" />
