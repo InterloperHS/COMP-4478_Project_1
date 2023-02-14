@@ -322,7 +322,7 @@ class Room extends FlxState {
 		// If they were not already just hit, subtract health and check if they should be killed
 		if (!FlxFlicker.isFlickering(p)) {
 			// Flash the camera so the player knows they were hit
-			FlxG.camera.flash(FlxColor.WHITE, 1);
+			FlxG.camera.flash(FlxColor.RED, 1);
 			// Flicker the Player sprite to give player "immunity" for a frew seconds
 			FlxFlicker.flicker(p);
 			p.health -= 25;
@@ -336,7 +336,7 @@ class Room extends FlxState {
 
 	public function hurtPlayerRanged(p:Player, b:FlxObject) {
 		// Flash the camera so the player knows they were hit
-		FlxG.camera.flash(FlxColor.WHITE, 1);
+		FlxG.camera.flash(FlxColor.RED, 1);
 
 		// If they were not already just hit, subtract health and check if they should be killed
 		if (!FlxFlicker.isFlickering(p)) {
