@@ -17,6 +17,7 @@ import flixel.math.FlxRandom;
 import flixel.math.FlxAngle;
 import flixel.text.FlxText;
 import flixel.effects.FlxFlicker;
+import flixel.system.FlxSound;
 
 class Room extends FlxState {
 	// Enemy related variables
@@ -78,6 +79,15 @@ class Room extends FlxState {
 	var rangedX:Array<Float>;
 	var rangedY:Array<Float>;
 
+	var enemyHurtSound:FlxSound;
+	var enemyKillSound:FlxSound;
+	var enemyShootSound:FlxSound;
+	var playerShootSound:FlxSound;
+	var playerHurtSound:FlxSound;
+	var ammoSound:FlxSound;
+	var doorSound:FlxSound;
+	var ambientCaveMusic:FlxSound;
+
 	override public function new(roomID:Int, mapPath:String) {
 		this.roomID = roomID;
 		// Load the map data from the Ogmo3 file with the current level data
@@ -100,6 +110,22 @@ class Room extends FlxState {
 		add(walls);
 		// Generate a new random key
 		random = new FlxRandom();
+
+		//Load sounds
+		enemyHurtSound = FlxG.sound.load(AssetPaths.shoot__wav);
+		enemyKillSound = FlxG.sound.load(AssetPaths.kill__wav);
+		enemyShootSound = FlxG.sound.load(AssetPaths.enemyshoot__wav);
+		playerHurtSound = FlxG.sound.load(AssetPaths.playhurt__wav);
+		playerShootSound = FlxG.sound.load(AssetPaths.playshoot__wav);
+		ammoSound = FlxG.sound.load(AssetPaths.ammopick__wav);
+		
+		doorSound = FlxG.sound.load(AssetPaths.enterdoor__wav);
+		doorSound.persist = true;
+
+		//Play ambience
+		ambientCaveMusic = FlxG.sound.load(AssetPaths.dungeon_air_6983__ogg);
+		ambientCaveMusic.play();
+		
 
 		// Create a new timer
 		timer = new FlxTimer();
@@ -234,6 +260,9 @@ class Room extends FlxState {
 
 			bullet.velocity.y = (yDist / dist) * speed;
 			bullet.velocity.x = (xDist / dist) * speed;
+
+			//Play sound
+			playerShootSound.play();
 		}
 
 		// Check if the bullets are out of bounds or touching an enemy
@@ -282,7 +311,11 @@ class Room extends FlxState {
 		e.health -= 25;
 		if (e.health <= 0) {
 			e.kill();
+			enemyKillSound.play();
 			Reg.ENEMIES[roomID]--;
+		}
+		else{
+			enemyHurtSound.play();
 		}
 
 		// Check if position matches any of the ranged spots
@@ -321,6 +354,8 @@ class Room extends FlxState {
 	public function hurtPlayer(p:Player, e:FlxObject) {
 		// If they were not already just hit, subtract health and check if they should be killed
 		if (!FlxFlicker.isFlickering(p)) {
+			// Play hurt sound
+			playerHurtSound.play();
 			// Flash the camera so the player knows they were hit
 			FlxG.camera.flash(FlxColor.RED, 1);
 			// Flicker the Player sprite to give player "immunity" for a frew seconds
@@ -355,6 +390,7 @@ class Room extends FlxState {
 	public function addAmmo(ammo:FlxObject, p:FlxSprite) {
 		// If the player touches an ammo box, kill it and increase their ammo by 5
 		ammo.kill();
+		ammoSound.play();
 		ammoNum += 5;
 		Reg.AMMO = ammoNum;
 	}
@@ -407,13 +443,13 @@ class Room extends FlxState {
 						bigEnemies.add(enemy);
 				}
 
-				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(100 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0,
+				enemyHealth = new FlxBar(enemy.x, enemy.y, LEFT_TO_RIGHT, Std.int(75 / FlxG.camera.zoom), Std.int(10 / FlxG.camera.zoom), enemy, "health", 0,
 					enemy.health, false);
 				enemyHealth.exists = true;
 				enemyHealth.killOnEmpty = true;
 
 				// Set the enemy health bar to follow the enemy we just spawned
-				enemyHealth.setParent(enemy, "health", true, Std.int(enemyHealth.width / 2 - enemy.width / 2) * -1, -12);
+				enemyHealth.setParent(enemy, "health", true, Std.int(enemyHealth.width / 2 - enemy.width / 2) * -1, -18);
 
 				// enemies.add(enemy);
 				enemyHealthBars.add(enemyHealth);
@@ -462,6 +498,7 @@ class Room extends FlxState {
 		if (rangeX.length > 0) {
 			for (i in 0...rangeX.length) {
 				if (rangeCanFire[i]) {
+					enemyShootSound.play();
 					// Create a bullet that will shoot towards the player
 					enemyProjectileDistX = player.x - rangeX[i];
 					enemyProjectileDistY = player.y - rangeY[i];
@@ -516,6 +553,9 @@ class Room extends FlxState {
 	public function onEncounterDoor(player:Dynamic, door:Dynamic) {
 		// Set entrance value
 		Reg.ENTRY = door.stateEntranceID;
+
+		// Play sound
+		doorSound.play();
 
 		// Determines which state to go to
 		switch (door.stateDestID) {

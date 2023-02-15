@@ -18,18 +18,6 @@ class Enemy extends FlxSprite {
 		target = play;
 		speed = spd;
 
-		// If speed = 0, ranged enemy
-		if (speed == 0) {
-			// Create some bullets for the enemy
-			var bullets = new FlxTypedGroup(numBullets);
-			for (i in 0...numBullets) {
-				var bullet:FlxSprite = new FlxSprite(-100, -100);
-				bullet.makeGraphic(15, 10, FlxColor.ORANGE);
-				bullet.exists = false;
-				bullets.add(bullet);
-			}
-		}
-
 		// Set the enemy's graphic based on the type
 		switch (enemyType) {
 			default:
@@ -49,8 +37,8 @@ class Enemy extends FlxSprite {
 				loadGraphic(AssetPaths.zombie__png, true, 16, 16);
 				setGraphicSize(32, 32);
 				setSize(16, 16);
-				offset.x = 8;
-				offset.y = 8;
+				offset.x = 4;
+				offset.y = 4;
 		}
 		createAnimations();
 	}
@@ -81,7 +69,6 @@ class Enemy extends FlxSprite {
 		if (speed != 0)
 			enemyMovement();
 		super.update(elapsed);
-		// if(speed == 0) enemyShoot();
 	}
 
 	function enemyMovement() {
@@ -122,21 +109,4 @@ class Enemy extends FlxSprite {
 		animation.play(action + moveDirection);
 	}
 
-	function enemyShoot() {
-		var enemyDistX:Float = this.x - target.x;
-		var enemyDistY:Float = this.y - target.y;
-
-		var enemyProjectileAngle = Std.int(Math.atan(enemyDistX / enemyDistY) * 57.2957795);
-
-		var enemyBullet:FlxSprite = bullets.recycle();
-		enemyBullet.x = this.x;
-		enemyBullet.y = this.y;
-		enemyBullet.angle = enemyProjectileAngle;
-
-		var speed = 300;
-		var distance = Math.sqrt((enemyDistX * enemyDistX) + (enemyDistY * enemyDistY));
-
-		enemyBullet.velocity.y = (enemyDistX / distance) * speed;
-		enemyBullet.velocity.x = (enemyDistX / distance) * speed;
-	}
 }
