@@ -375,6 +375,8 @@ class Room extends FlxState {
 
 		// If they were not already just hit, subtract health and check if they should be killed
 		if (!FlxFlicker.isFlickering(p)) {
+			// Play hurt sound
+			playerHurtSound.play();
 			p.health -= 25;
 			Reg.PLAYERHEALTH = p.health;
 			if (p.health <= 0) {
