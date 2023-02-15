@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.text.FlxText;
+import flixel.system.FlxSound;
 
 // The game state class that extends FlxState
 class Laboratory extends FlxState {
@@ -12,6 +13,7 @@ class Laboratory extends FlxState {
 	var mouth:FlxSprite = new FlxSprite();
 	var mouth1:FlxSprite = new FlxSprite();
 	var background:FlxSprite = new FlxSprite();
+	var crowd:FlxSound;
 
 	private var tutorialModal:FlxSprite;
 	private var tutorialText:FlxText;
@@ -20,6 +22,9 @@ class Laboratory extends FlxState {
 
 	override public function create():Void {
 		super.create();
+				crowd = FlxG.sound.load(AssetPaths.crowd__wav);
+				
+
 
 		background.loadGraphic("assets/images/lab.jpg");
 		Earth.resizeImage(background, 640, 480, 0, 0);
@@ -98,6 +103,7 @@ class Laboratory extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		crowd.play();
 		if (tutorialIndex == 0)
 			mouth.animation.play("talk");
 
