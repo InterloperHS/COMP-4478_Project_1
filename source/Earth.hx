@@ -7,8 +7,11 @@ import flixel.text.FlxText;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxTween;
+import flixel.system.FlxSound;
 
 class Earth extends FlxState {
+
+	//points where the zombies can move
 	var points:Array<FlxPoint> = [
 		new FlxPoint(1, 200),
 		new FlxPoint(1, 250),
@@ -20,6 +23,9 @@ class Earth extends FlxState {
 	// define sprite var
 	var randomX:Float;
 	var randomY:Float;
+	var expSound:FlxSound;
+	var panic:FlxSound;
+	var craft:FlxSound;
 	var exp:FlxSprite = new FlxSprite();
 	var exp1:FlxSprite = new FlxSprite();
 	var exp2:FlxSprite = new FlxSprite();
@@ -44,6 +50,10 @@ class Earth extends FlxState {
 	var exps:FlxGroup = new FlxGroup();
 
 	override public function create() {
+        expSound = FlxG.sound.load(AssetPaths.expSound__wav);
+        craft = FlxG.sound.load(AssetPaths.spacecraftSound__wav);
+		panic = FlxG.sound.load(AssetPaths.panic__wav);
+		
 		var background:FlxSprite = new FlxSprite();
 		background.loadGraphic("assets/images/bg1.jpg");
 		resizeImage(background, 640, 480, 0, 0);
@@ -215,6 +225,7 @@ class Earth extends FlxState {
 		timePassed += FlxG.elapsed;
 
 		if (timePassed >= 1) {
+			craft.play();
 			light.velocity.x -= 40;
 			mySprite.velocity.x -= 40;
 
@@ -261,26 +272,31 @@ class Earth extends FlxState {
 		if (light.overlapsPoint(point, true)) {
 			add(exp);
 			exp.animation.play("exp");
+			expSound.play();
 		}
 
 		if (light.overlapsPoint(point1, true)) {
 			add(exp1);
 			exp1.animation.play("exp1");
+			expSound.play();
 		}
 
 		if (light.overlapsPoint(point2, true)) {
 			add(exp2);
 			exp2.animation.play("exp2");
+			expSound.play();
 		}
 
 		if (light.overlapsPoint(point3, true)) {
 			if (boy1.alive)
 				var tween:FlxTween = FlxTween.tween(boy1, {x: -100, y: boy1.y + 50}, 10);
+				panic.play();
 		}
 
 		if (light.overlapsPoint(point4, true)) {
 			if (boy2.alive)
 				var tween:FlxTween = FlxTween.tween(boy2, {x: 700, y: boy2.y + 50}, 10);
+				panic.play();
 		}
 
 		if (mySprite.x < FlxG.worldBounds.left) {
