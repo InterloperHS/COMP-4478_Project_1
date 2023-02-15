@@ -28,4 +28,4 @@ Steps to build
 - Open terminal in game source directory
 - Build and test with ` lime build neko; lime test neko `
 
-**Full Changelog**: https://github.com/InterloperHS/COMP-4478_Project_1/commits/neko_v0.0.1
+**Full Changelog**: https://github.com/InterloperHS/COMP-4478_Project_1/commits
