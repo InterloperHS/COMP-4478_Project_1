@@ -381,6 +381,7 @@ class Room extends FlxState {
 			Reg.PLAYERHEALTH = p.health;
 			if (p.health <= 0) {
 				p.kill();
+				FlxG.switchState(new GameOverState(LOSE));
 			}
 		}
 
