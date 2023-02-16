@@ -3,11 +3,14 @@ package;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIState;
 
+// A simple enum for whether the game was won or lost
 enum WinLoseState {
 	WIN;
 	LOSE;
 }
 
+// The game over screen. Displays a message based on
+// whether the player won or lost
 class GameOverState extends FlxUIState {
 	var winState:WinLoseState = LOSE;
 

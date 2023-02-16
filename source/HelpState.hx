@@ -4,6 +4,7 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUISubState;
 
+// A simple help screen.
 class HelpState extends FlxUISubState {
 	override public function new(BGColor:FlxColor) {
 		super(BGColor);
