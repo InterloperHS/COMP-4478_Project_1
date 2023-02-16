@@ -43,7 +43,7 @@ class Earth extends FlxState {
 	var zom6:FlxSprite = new FlxSprite();
 	var zom7:FlxSprite = new FlxSprite();
 	var light:FlxSprite = new FlxSprite();
-	var Stext:FlxText = new FlxText(0, 0, FlxG.width, "Quick! Get in the building with your keys!");
+	var Stext:FlxText = new FlxText(0, 0, FlxG.width, "Quick! Get in the building with your keys (A or Left Arrow Key)!");
 	var rip:FlxSprite = new FlxSprite();
 	var rip1:FlxSprite = new FlxSprite();
 	var zombies:FlxGroup = new FlxGroup();
@@ -354,9 +354,9 @@ class Earth extends FlxState {
 				if (FlxG.keys.pressed.R) {
 					FlxG.resetState();
 				}
+
 				if (FlxG.keys.pressed.ESCAPE) {
-					// TODO: add pause menu
-					FlxG.switchState(new MenuState());
+					openSubState(new PauseState(0x5D000000));
 				}
 			}
 
