@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
 	<text name="title" y="96" text="Zombie Topdown Shooter" size="16" center_x="true" align="center">
-		<anchor name="title" y-flush="top" y="screen.top" />
+		<anchor y-flush="top" y="screen.top" />
 	</text>
 	<text name="description"
 		text="A zombie invasion has appeared after aliens discovered our planet! It's your job to defeat them and make sure that they don't escape their biggest target, the dungeon building!"
 		size="12" center_x="true" align="center">
-		<anchor name="description" y-flush="top" y="title.bottom+8" />
+		<anchor y-flush="top" y="title.bottom+8" />
 	</text>
 	<align axis="horizontal" resize="true">
 		<bounds left="screen.left+16" right="screen.right-16" />
