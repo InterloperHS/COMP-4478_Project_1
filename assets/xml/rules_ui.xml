@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <text name="title" y="96" text="Game Rules" size="16" center_x="true" align="center">
+		<anchor y-flush="top" y="screen.top" />
+	</text>
+    <text name="description"
+        text="You can find 3 types of zombies, a regular zombie, ranged zombie and a large zombie. To win the game, you must defeat all the enemies, in all the different rooms. Move between the rooms through the doors. You can move around with the arrow keys or WASD. You can shoot with the spacebar.\nYour ammo is limited and can be replenished by picking up ammo boxes. You can see you current ammo and health in the HUD at the bottom of the screen."
+        size="12" center_x="true" align="center">
+        <anchor name="description" y-flush="top" y="title.bottom+8" />
+    </text>
+</data>
