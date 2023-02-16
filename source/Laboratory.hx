@@ -40,6 +40,11 @@ class Laboratory extends FlxState {
 		tutorialText.y = 1;
 		tutorialModal.y = 1;
 
+		// Add click to continue text
+		var clickToContinue:FlxText = new FlxText(0, 0, 0, "Click to continue");
+		clickToContinue.setPosition(tutorialModal.x + tutorialModal.width - clickToContinue.width, tutorialModal.y + tutorialModal.height + 10);
+		add(clickToContinue);
+
 		// Create tutorial array
 		tutorialArray = [
 			"Hello Professor Mohammad, I heard we've lost contact with the Space Probe Voyager 1, is that true?",
