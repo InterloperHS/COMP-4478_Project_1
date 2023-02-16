@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 
 class OptionsState extends FlxUISubState {
 	var speedValue:FlxText;
+	var volumeValue:FlxText;
 
 	override public function new() {
 		super(FlxColor.BLACK);
@@ -35,6 +36,35 @@ class OptionsState extends FlxUISubState {
 		speedValue.text = Std.string(Reg.SPEED);
 		speedValue.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
 		add(speedValue);
+
+		var volumeBar = new FlxUIBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.camera.viewWidth - 160), 32, FlxG.sound, "volume", 0, 100, true);
+		volumeBar.setPosition(FlxG.camera.viewWidth / 2 - volumeBar.width / 2, _ui.getAsset("volume_down").y);
+		volumeBar.set_style({
+			filledColors: null,
+			emptyColors: null,
+			chunkSize: null,
+			gradRotation: null,
+			filledColor: 0xFFFFFFFF,
+			emptyColor: 0xFF000000,
+			borderColor: 0xFF242424,
+			filledImgSrc: null,
+			emptyImgSrc: null
+		});
+		add(volumeBar);
+		volumeValue = _ui.getFlxText("volume_value");
+		volumeValue.text = Std.string(FlxG.sound.volume * 100);
+		volumeValue.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+		add(volumeValue);
+	}
+
+	private function updateSpeed() {
+		speedValue.text = Std.string(Reg.SPEED);
+		FlxG.save.data.SPEED = Reg.SPEED;
+	}
+
+	private function updateVolume() {
+		FlxG.save.data.volume = FlxG.sound.volume;
+		volumeValue.text = Std.string(Std.int(FlxG.sound.volume * 100)) + "%";
 	}
 
 	override public function getEvent(event:String, target:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
@@ -43,19 +73,26 @@ class OptionsState extends FlxUISubState {
 				case "click_button":
 					switch (Std.string(params[0])) {
 						case "back": {
-								FlxG.save.data.SPEED = Reg.SPEED;
 								FlxG.save.flush();
 								close();
 							}
 						case "speed_down": {
 								if (Reg.SPEED - 5 >= 5)
 									Reg.SPEED -= 5;
-								speedValue.text = Std.string(Reg.SPEED);
+								updateSpeed();
 							}
 						case "speed_up": {
 								if (Reg.SPEED + 5 <= 20)
 									Reg.SPEED += 5;
-								speedValue.text = Std.string(Reg.SPEED);
+								updateSpeed();
+							}
+						case "volume_down": {
+								FlxG.sound.volume -= 0.1;
+								updateVolume();
+							}
+						case "volume_up": {
+								FlxG.sound.volume += 0.1;
+								updateVolume();
 							}
 					}
 			}
