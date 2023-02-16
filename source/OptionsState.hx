@@ -37,7 +37,7 @@ class OptionsState extends FlxUISubState {
 		speedValue.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
 		add(speedValue);
 
-		var volumeBar = new FlxUIBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.camera.viewWidth - 160), 32, FlxG.sound, "volume", 0, 100, true);
+		var volumeBar = new FlxUIBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.camera.viewWidth - 160), 32, FlxG.sound, "volume", 0.0, 1.0, true);
 		volumeBar.setPosition(FlxG.camera.viewWidth / 2 - volumeBar.width / 2, _ui.getAsset("volume_down").y);
 		volumeBar.set_style({
 			filledColors: null,
@@ -52,9 +52,11 @@ class OptionsState extends FlxUISubState {
 		});
 		add(volumeBar);
 		volumeValue = _ui.getFlxText("volume_value");
-		volumeValue.text = Std.string(FlxG.sound.volume * 100);
+		updateVolume();
 		volumeValue.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
 		add(volumeValue);
+		FlxG.sound.soundTrayEnabled = false;
+		FlxG.sound.volumeHandler = updateVolume;
 	}
 
 	private function updateSpeed() {
@@ -62,8 +64,11 @@ class OptionsState extends FlxUISubState {
 		FlxG.save.data.SPEED = Reg.SPEED;
 	}
 
-	private function updateVolume() {
-		FlxG.save.data.volume = FlxG.sound.volume;
+	private function updateVolume(volume:Float = null) {
+		if (volume == null)
+			FlxG.save.data.volume = FlxG.sound.volume;
+		else
+			FlxG.save.data.volume = volume;
 		volumeValue.text = Std.string(Std.int(FlxG.sound.volume * 100)) + "%";
 	}
 
@@ -74,7 +79,15 @@ class OptionsState extends FlxUISubState {
 					switch (Std.string(params[0])) {
 						case "back": {
 								FlxG.save.flush();
+								FlxG.sound.soundTrayEnabled = true;
 								close();
+							}
+						case "clear_data": {
+								FlxG.save.erase();
+								Reg.SPEED = 10;
+								FlxG.sound.volume = 1;
+								updateSpeed();
+								updateVolume();
 							}
 						case "speed_down": {
 								if (Reg.SPEED - 5 >= 5)
@@ -87,11 +100,11 @@ class OptionsState extends FlxUISubState {
 								updateSpeed();
 							}
 						case "volume_down": {
-								FlxG.sound.volume -= 0.1;
+								FlxG.sound.changeVolume(-0.1);
 								updateVolume();
 							}
 						case "volume_up": {
-								FlxG.sound.volume += 0.1;
+								FlxG.sound.changeVolume(0.1);
 								updateVolume();
 							}
 					}
