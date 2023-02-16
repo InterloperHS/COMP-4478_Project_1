@@ -35,9 +35,14 @@
     <text name="volume_value" size="16" align="center" center_x="true">
         <anchor y-flush="center" y="volume_down.center" />
     </text>
-    <button name="back" y="-64" label="Back" width="64" height="32" center_x="true">
+    <button name="back" y="-64" x="-4" label="Back" width="64" height="32">
         <text size="12" align="center" color="0x000000" />
         <param type="string" value="back" />
-        <anchor y-flush="bottom" y="screen.bottom" />
+        <anchor y-flush="bottom" y="screen.bottom" x-flush="right" x="screen.center" />
+    </button>
+    <button name="clear_data" y="-64" x="4" label="Clear Data" width="64" height="32">
+        <text size="12" align="center" color="0x000000" />
+        <param type="string" value="clear_data" />
+        <anchor y-flush="bottom" y="screen.bottom" x-flush="left" x="screen.center" />
     </button>
 </data>
