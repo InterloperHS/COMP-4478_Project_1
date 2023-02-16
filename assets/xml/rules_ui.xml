@@ -4,8 +4,21 @@
 		<anchor y-flush="top" y="screen.top" />
 	</text>
     <text name="description"
-        text="You can find 3 types of zombies, a regular zombie, ranged zombie and a large zombie. To win the game, you must defeat all the enemies, in all the different rooms. Move between the rooms through the doors. You can move around with the arrow keys or WASD. You can shoot with the spacebar.\nYour ammo is limited and can be replenished by picking up ammo boxes. You can see you current ammo and health in the HUD at the bottom of the screen."
-        size="12" center_x="true" align="center">
+        text="You can find 3 types of zombies, a regular zombie, ranged zombie and a large zombie. Defeat all the enemies, in all the different rooms to win the game. Move between the rooms through the doors. Replenish your ammo by picking up ammo boxes. You can see you current ammo and health in the HUD at the bottom of the screen."
+        size="14" center_x="true" align="center">
         <anchor name="description" y-flush="top" y="title.bottom+8" />
     </text>
+	<align axis="horizontal" resize="true">
+		<bounds left="screen.left+16" right="screen.right-16" />
+		<objects value="title" />
+	</align>
+	<align axis="horizontal" resize="true">
+		<bounds left="screen.left+16" right="screen.right-16" />
+		<objects value="description" />
+	</align>
+    <button name="back" y="64" label="Back" width="64" height="32">
+        <text size="12" align="center" color="0x000000" />
+        <param type="string" value="back" />
+        <anchor y-flush="top" y="description.bottom" x-flush="center" x="description.center" />
+    </button>
 </data>

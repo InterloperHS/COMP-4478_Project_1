@@ -20,6 +20,7 @@ class MenuState extends FlxUIState {
 		super.create();
 	}
 
+	// Override this function to handle events from the UI
 	override public function getEvent(event:String, target:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void {
 		if (params != null) {
 			switch (event) {
@@ -29,6 +30,7 @@ class MenuState extends FlxUIState {
 						case "story": FlxG.switchState(new Laboratory());
 						case "options": openSubState(new OptionsState());
 						case "help": openSubState(new HelpState(FlxColor.BLACK));
+						case "rules": openSubState(new RulesState(FlxColor.BLACK));
 					}
 			}
 		}

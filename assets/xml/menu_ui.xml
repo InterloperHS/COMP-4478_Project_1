@@ -31,17 +31,23 @@
 	<button name="help" label="Help">
 		<param type="string" value="help" />
 	</button>
+	<button name="rules" label="Rules">
+		<param type="string" value="rules" />
+	</button>
 	<position name="play" center_y="true" center_x="true">
-		<anchor name="play" x-flush="middle" y="story.top-4" />
+		<anchor x-flush="middle" y="story.top-4" />
 	</position>
 	<position name="story" center_y="true" x="-16">
-		<anchor name="story" x-flush="right" x="play.left" />
+		<anchor x-flush="right" x="play.left" />
 	</position>
 	<position name="options" center_y="true" x="16">
-		<anchor name="options" x-flush="left" x="play.right" />
+		<anchor x-flush="left" x="play.right" />
 	</position>
 	<position name="help" x="-16" y="16" width="64" height="32">
-		<anchor name="help" x-flush="right" x="screen.right" />
+		<anchor x-flush="right" x="screen.right" />
+	</position>
+	<position name="rules" y="16" x="help.x" width="64" height="32">
+		<anchor y-flush="top" y="help.bottom"/>
 	</position>
 
 </data>
